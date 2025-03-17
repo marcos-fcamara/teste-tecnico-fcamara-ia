@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-03-17T14:30:00.000Z" agent="5.0 (Windows NT 10.0; Win64; x64)" etag="architecture-azure-components" version="15.8.3" type="device">
+  <diagram id="azure-components-architecture" name="Arquitetura de Componentes Azure para Sistema de Busca por Similaridade">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <mxCell id="title" value="Arquitetura de Componentes Azure - Sistema de Busca por Similaridade de Imagens" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="184.5" y="20" width="800" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="azure_subscription" value="Azure Subscription" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EEEEFF;strokeColor=#0078D7;dashed=0;verticalAlign=top;fontStyle=1;fontSize=14;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="1080" height="680" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="resource_group" value="Resource Group: fashion-similarity-search-rg" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#0078D7;dashed=0;verticalAlign=top;fontStyle=1;fontSize=12;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="1040" height="500" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="vnet" value="Virtual Network: fashion-vnet" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F1F6FD;strokeColor=#0078D7;dashed=1;verticalAlign=top;fontStyle=1;fontSize=11;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="1000" height="440" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="function_app" value="Function App: fashion-search-api" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/compute/Function_Apps.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="410" y="280" width="68" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="app_service_plan" value="App Service Plan: fashion-asp" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/app_services/App_Service_Plans.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="284" y="200" width="64" height="64" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="storage_account" value="Storage Account: fashiondata" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/storage/Storage_Accounts.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="670" y="280" width="65" height="52" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cosmos_db" value="Cosmos DB: fashion-vectordb" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/databases/Azure_Cosmos_DB.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="670" y="400" width="64" height="64" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="key_vault" value="Key Vault: fashion-kv" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/security/Key_Vaults.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="414" y="400" width="60" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="static_web_app" value="Static Web App: fashion-frontend" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/app_services/Static_Web_Apps.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="200" y="280" width="64" height="52" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="container_registry" value="Container Registry: fashioncr" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/containers/Container_Registries.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="540" y="490" width="68" height="61" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="app_insights" value="Application Insights" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/devops/Application_Insights.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="540" y="280" width="44" height="63" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="log_analytics" value="Log Analytics" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/analytics/Log_Analytics_Workspaces.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="540" y="400" width="64" height="64" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="api_connection" value="API Connection: OpenAI" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/integration/API_Management_Services.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="800" y="350" width="65" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="container_apps" value="Container Apps: fashion-processing" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/compute/Container_Apps.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="290" y="400" width="68" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="github_action" value="GitHub Actions" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/devops/Azure_DevOps.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="320" y="640" width="64" height="64" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="azure_devops" value="Azure DevOps Pipelines" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/devops/Pipelines.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="540" y="640" width="68" height="68" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cicd_container" value="CI/CD Pipeline" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8E6;strokeColor=#FFB400;dashed=1;verticalAlign=top;fontStyle=1;fontSize=12;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="60" y="630" width="1040" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="azure_monitor" value="Azure Monitor" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/management_governance/Monitor.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="670" y="490" width="64" height="64" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="github_repo" value="GitHub Repository" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.git_repository;" vertex="1" parent="1">
+          <mxGeometry x="110" y="642" width="50" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="azure_artifacts" value="Azure Artifacts" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/devops/Artifacts.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="760" y="640" width="64" height="64" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="release_management" value="Release Management" style="aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/azure2/devops/Release.svg;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="960" y="638" width="68" height="68" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="application_modules" value="Componentes da Aplicação" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8F4FF;strokeColor=#0078D7;dashed=1;verticalAlign=top;fontStyle=1;fontSize=11;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="920" y="170" width="130" height="400" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="component_vector_db" value="VectorDatabase" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="935" y="205" width="100" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="component_image_processor" value="ImageProcessor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="935" y="250" width="100" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="component_text_processor" value="TextProcessor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="935" y="295" width="100" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="component_search_api" value="SearchAPI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="935" y="340" width="100" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="component_blob_storage" value="BlobStorage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="935" y="385" width="100" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="component_config" value="Configuration" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="935" y="430" width="100" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="component_frontend" value="ReactFrontend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="935" y="475" width="100" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="component_logging" value="Logging" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="935" y="520" width="100" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Conexões -->
+        <mxCell id="static_web_to_function" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="static_web_app" target="function_app">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="270" y="310" as="sourcePoint" />
+            <mxPoint x="320" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="asp_to_function" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="app_service_plan" target="function_app">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="310" y="280" as="sourcePoint" />
+            <mxPoint x="360" y="230" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="316" y="260" />
+              <mxPoint x="430" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Function App -> App Insights -->
+        <mxCell id="function_to_insights" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="function_app" target="app_insights">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="310" as="sourcePoint" />
+            <mxPoint x="540" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Function App -> Storage Account -->
+        <mxCell id="function_to_storage" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="function_app" target="storage_account">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="487" y="295" as="sourcePoint" />
+            <mxPoint x="550" y="311.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Function App -> Cosmos DB -->
+        <mxCell id="function_to_cosmos" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="function_app" target="cosmos_db">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="487" y="320" as="sourcePoint" />
+            <mxPoint x="550" y="336.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="461" y="360" />
+              <mxPoint x="600" y="360" />
+              <mxPoint x="600" y="416" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Function App -> Key Vault -->
+        <mxCell id="function_to_keyvault" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="function_app" target="key_vault">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="430" y="380" as="sourcePoint" />
+            <mxPoint x="480" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Function App -> API Connection -->
+        <mxCell id="function_to_api" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="function_app" target="api_connection">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="487" y="345" as="sourcePoint" />
+            <mxPoint x="550" y="361.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="640" y="325" />
+              <mxPoint x="640" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Container Apps -> Function App -->
+        <mxCell id="container_to_function" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="container_apps" target="function_app">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="320" y="380" as="sourcePoint" />
+            <mxPoint x="370" y="330" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="324" y="380" />
+              <mxPoint x="430" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- App Insights -> Log Analytics -->
+        <mxCell id="insights_to_log" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="app_insights" target="log_analytics">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="370" as="sourcePoint" />
+            <mxPoint x="610" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Log Analytics -> Monitor -->
+        <mxCell id="log_to_monitor" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="log_analytics" target="azure_monitor">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="480" as="sourcePoint" />
+            <mxPoint x="610" y="430" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="572" y="480" />
+              <mxPoint x="620" y="480" />
+              <mxPoint x="620" y="522" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- GitHub Repo -> GitHub Action -->
+        <mxCell id="repo_to_action" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="github_repo" target="github_action">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="220" y="680" as="sourcePoint" />
+            <mxPoint x="270" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- GitHub Action -> Azure DevOps -->
+        <mxCell id="action_to_devops" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="github_action" target="azure_devops">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="430" y="680" as="sourcePoint" />
+            <mxPoint x="480" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Azure DevOps -> Azure Artifacts -->
+        <mxCell id="devops_to_artifacts" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="azure_devops" target="azure_artifacts">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="650" y="680" as="sourcePoint" />
+            <mxPoint x="700" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Azure Artifacts -> Release Management -->
+        <mxCell id="artifacts_to_release" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="azure_artifacts" target="release_management">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="860" y="680" as="sourcePoint" />
+            <mxPoint x="910" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Release Management -> Resources (Deploy) -->
+        <mxCell id="release_to_resources" value="Deploy" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="release_management" target="resource_group">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="770" y="560" as="sourcePoint" />
+            <mxPoint x="820" y="510" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="994" y="600" />
+              <mxPoint x="840" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Container Registry -> Container Apps -->
+        <mxCell id="registry_to_container" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="container_registry" target="container_apps">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="430" y="500" as="sourcePoint" />
+            <mxPoint x="480" y="450" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="450" y="505" />
+              <mxPoint x="450" y="480" />
+              <mxPoint x="341" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Storage Account -> Blob Container (annotations) -->
+        <mxCell id="blob_container_annotation" value="Blob Containers:&#xa;- images&#xa;- thumbnails&#xa;- processed" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;align=left;size=15;" vertex="1" parent="1">
+          <mxGeometry x="740" y="260" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Cosmos DB Annotation -->
+        <mxCell id="cosmos_annotation" value="Collections:&#xa;- vectorembeddings&#xa;- metadata" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fff2cc;strokeColor=#d6b656;align=left;size=15;" vertex="1" parent="1">
+          <mxGeometry x="740" y="400" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Conectar Componentes da Aplicação com Recursos -->
+        <mxCell id="component_vector_to_cosmos" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="component_vector_db" target="cosmos_db">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="220" as="sourcePoint" />
+            <mxPoint x="740" y="410" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="880" y="220" />
+              <mxPoint x="880" y="380" />
+              <mxPoint x="760" y="380" />
+              <mxPoint x="760" y="416" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="component_blob_to_storage" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="component_blob_storage" target="storage_account">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="400" as="sourcePoint" />
+            <mxPoint x="740" y="319" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="880" y="400" />
+              <mxPoint x="880" y="340" />
+              <mxPoint x="760" y="340" />
+              <mxPoint x="760" y="319" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="component_config_to_keyvault" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="component_config" target="key_vault">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="445" as="sourcePoint" />
+            <mxPoint x="474" y="430" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="850" y="445" />
+              <mxPoint x="850" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="component_image_to_api" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="component_image_processor" target="api_connection">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="265" as="sourcePoint" />
+            <mxPoint x="865" y="365" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="880" y="265" />
+              <mxPoint x="880" y="320" />
+              <mxPoint x="880" y="365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="component_text_to_api" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="component_text_processor" target="api_connection">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="310" as="sourcePoint" />
+            <mxPoint x="865" y="395" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="880" y="310" />
+              <mxPoint x="880" y="395" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="component_api_to_function" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="component_search_api" target="function_app">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="355" as="sourcePoint" />
+            <mxPoint x="478" y="310" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="850" y="355" />
+              <mxPoint x="850" y="310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="component_frontend_to_webapp" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="component_frontend" target="static_web_app">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="490" as="sourcePoint" />
+            <mxPoint x="264" y="319" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="850" y="490" />
+              <mxPoint x="850" y="530" />
+              <mxPoint x="120" y="530" />
+              <mxPoint x="120" y="319" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="component_logging_to_insights" value="" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="component_logging" target="app_insights">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="535" as="sourcePoint" />
+            <mxPoint x="594" y="330" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="850" y="535" />
+              <mxPoint x="850" y="550" />
+              <mxPoint x="620" y="550" />
+              <mxPoint x="620" y="327" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend_container" value="Legenda" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="480" width="140" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_item1" value="→ Conexão direta" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="legend_container">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_item2" value="⇢ Conexão lógica" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="legend_container">
+          <mxGeometry y="60" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_item3" value="□ Componente Azure" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="legend_container">
+          <mxGeometry y="90" width="140" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
