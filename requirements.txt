@@ -7,3 +7,13 @@ tqdm
 numpy
 fastapi
 uvicorn
+torch
+torchvision
+pytest
+requests
+pydantic
+aiofiles
+httpx
+python-multipart
+tabulate
+pandas

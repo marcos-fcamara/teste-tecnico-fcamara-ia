@@ -1,0 +1,6 @@
+.env
+cache
+chroma_db
+logs
+src/__pycache__
+*/*/__pycache__

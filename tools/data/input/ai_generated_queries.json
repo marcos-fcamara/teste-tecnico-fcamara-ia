@@ -1,0 +1,47 @@
+[
+  {
+    "query": "Vestido longo floral para festas de verão com decote profundo",
+    "categoria": "ocasião",
+    "intenção": "Procurar uma peça elegante para uma festa de verão"
+  },
+  {
+    "query": "Macaquinho sexy azul escuro para festas de verão",
+    "categoria": "ocasião",
+    "intenção": "Encontrar um macaquinho estiloso para uma festa de verão"
+  },
+  {
+    "query": "Vestido elegante preto e branco para eventos formais na primavera",
+    "categoria": "ocasião",
+    "intenção": "Buscar uma roupa sofisticada para um evento formal na primavera"
+  },
+  {
+    "query": "vestido florido para festas de verão com decote especial",
+    "categoria": "estação",
+    "intenção": "Buscar vestidos adequados para festas durante o verão, com foco em estampas florais e detalhes no decote."
+  },
+  {
+    "query": "roupa formal primavera preto e branco",
+    "categoria": "estação",
+    "intenção": "Encontrar roupas de estilo formal para usar na primavera, especificamente em cores preto e branco."
+  },
+  {
+    "query": "conjunto de praia verão preto e branco",
+    "categoria": "estação",
+    "intenção": "Procurar conjuntos de roupas apropriados para a praia no verão, com ênfase em combinação de cores preto e branco."
+  },
+  {
+    "query": "Quero um vestido longo floral com cores vibrantes, perfeito para festas de verão",
+    "categoria": "cor",
+    "intenção": "Encontrar um vestido longo com padrão floral em cores vivas para usar em festas de verão"
+  },
+  {
+    "query": "Preciso de um conjunto de top e shorts em preto e branco para a praia neste verão",
+    "categoria": "cor",
+    "intenção": "Procurar um conjunto de roupa praiana com uma combinação clássica de preto e branco"
+  },
+  {
+    "query": "Estou buscando um macaquinho azul escuro sexy para festas noturnas",
+    "categoria": "cor",
+    "intenção": "Encontrar um macaquinho em tom de azul escuro adequado para eventos noturnos"
+  }
+]

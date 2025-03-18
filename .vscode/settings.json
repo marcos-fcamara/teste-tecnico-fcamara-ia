@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "/home/azureuser/fashion-similarity-search/teste-tecnico-fcamara"
+    ]
+}

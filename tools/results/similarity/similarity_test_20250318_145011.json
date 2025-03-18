@@ -1,0 +1,114 @@
+{
+  "vestido vermelho": {
+    "standard": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    },
+    "advanced": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    }
+  },
+  "camisa social branca": {
+    "standard": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    },
+    "advanced": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    }
+  },
+  "calça jeans azul": {
+    "standard": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    },
+    "advanced": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    }
+  },
+  "roupa casual para verão": {
+    "standard": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    },
+    "advanced": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    }
+  },
+  "vestido floral para festas": {
+    "standard": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    },
+    "advanced": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    }
+  },
+  "camiseta preta básica": {
+    "standard": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    },
+    "advanced": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    }
+  },
+  "roupa formal para homem": {
+    "standard": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    },
+    "advanced": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    }
+  },
+  "blusa feminina para trabalho": {
+    "standard": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    },
+    "advanced": {
+      "similarities": [],
+      "average": 0,
+      "max": 0,
+      "enhanced_query": "..."
+    }
+  }
+}
