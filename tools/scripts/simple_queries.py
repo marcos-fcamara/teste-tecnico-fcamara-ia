@@ -91,8 +91,8 @@ def extract_categories(df):
     return categories
 
 def main():
-    descriptions_file = "test_descriptions.csv"
-    output_file = "test_queries.txt"
+    descriptions_file = "../data/input/test_descriptions.csv"
+    output_file = "../data/input/test_queries.txt"
     
     try:
         df = pd.read_csv(descriptions_file)

@@ -6,13 +6,13 @@ from tabulate import tabulate
 from datetime import datetime
 from dotenv import load_dotenv
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
-output_dir = "search_tests_results"
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..','src')))
+output_dir = "results/search"
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-os.environ["CHROMA_PERSIST_DIRECTORY"] = os.path.abspath(os.path.join(os.path.dirname(__file__), '../chroma_db'))
+os.environ["CHROMA_PERSIST_DIRECTORY"] = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../chroma_db'))
 
 from processing.indexer import ImageIndexer
 from processing.image_processor import ImageProcessor

@@ -1,177 +1,236 @@
 import os
 import base64
 import logging
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Any, Optional, Union
+import time
+from io import BytesIO
 
-from openai import OpenAI
 import numpy as np
 from PIL import Image
-import io
+from openai import OpenAI
 
-from src.processing.image_normalizer import ImageNormalizer
+from src.utils.cache_manager import CacheManager, cached_description, cached_embedding
 
 logger = logging.getLogger(__name__)
 
 class ImageProcessor:
-    def __init__(self, 
-                 api_key: Optional[str] = None, 
-                 model: Optional[str] = None,
-                 normalize_images: bool = True):
+    """Classe para processar imagens e extrair embeddings e descrições."""
+    
+    def __init__(self, api_key: Optional[str] = None):
+        """
+        Inicializa o processador de imagens.
         
+        Args:
+            api_key: Chave da API da OpenAI. Se None, será usada a variável de ambiente.
+        """
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         if not self.api_key:
             raise ValueError("API key da OpenAI não fornecida")
             
         self.client = OpenAI(api_key=self.api_key)
-        self.model = model or os.getenv("VISION_MODEL")
+        self.vision_model = os.getenv("VISION_MODEL")
+        self.embedding_model = os.getenv("EMBEDDING_MODEL")
         
-        self.normalize_images = normalize_images
-        if normalize_images:
-            self.normalizer = ImageNormalizer(
-                target_size=(512, 512),
-                enhance_contrast=True,
-                sharpen=True,
-                normalize_lighting=True
-            )
-        
-    def encode_image(self, image_path: str) -> str:
-        """Codifica uma imagem em base64 para envio à API."""
-        try:
-            with open(image_path, "rb") as image_file:
-                return base64.b64encode(image_file.read()).decode('utf-8')
-        except Exception as e:
-            logger.error(f"Erro ao codificar imagem {image_path}: {str(e)}")
-            raise
+        # Inicializa o gerenciador de cache
+        self.cache_manager = CacheManager()
     
-    def get_image_description(self, image_path: str) -> Dict[str, str]:
-        """Obtém descrição detalhada da imagem usando a API de visão da OpenAI."""
-        if not os.path.exists(image_path):
-            raise FileNotFoundError(f"Imagem não encontrada: {image_path}")
-            
-        try:
-            if self.normalize_images:
-                try:
-                    normalized_path = self.normalizer.normalize_image(image_path)
-                    
-                    processing_path = normalized_path
-                    logger.info(f"Usando imagem normalizada: {normalized_path}")
-                except Exception as e:
-                    logger.warning(f"Falha ao normalizar imagem {image_path}: {str(e)}")
-                    processing_path = image_path
-            else:
-                processing_path = image_path
-            
-            with Image.open(processing_path) as img:
-                max_size = 1024
-                if max(img.size) > max_size:
-                    ratio = max_size / max(img.size)
-                    new_size = tuple(int(x * ratio) for x in img.size)
-                    img = img.resize(new_size, Image.LANCZOS)
-                
-                if img.mode != "RGB":
-                    img = img.convert("RGB")
-                
-                buffer = io.BytesIO()
-                img = img.convert('RGB')
-                img.save(buffer, format="JPEG", quality=90)
-                base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    def _encode_image(self, image_path: str) -> str:
+        """
+        Codifica a imagem em base64.
         
-            prompt = """
-            Descreva detalhadamente esta peça de roupa. 
-            Inclua especificamente as seguintes informações em formato estruturado:
-            - Tipo de peça (exemplo: camisa, calça, vestido)
-            - Ocasião de uso (exemplo: casual, formal, esportiva)
-            - Cores predominantes
-            - Padrão (exemplo: liso, listrado, floral)
-            - Materiais aparentes
-            - Estilo/estética
-            - Gênero (masculino, feminino, unissex)
-            - Estação do ano mais adequada
+        Args:
+            image_path: Caminho para a imagem.
             
-            Formate a resposta como um objeto JSON com estes campos.
-            """
+        Returns:
+            str: Imagem codificada em base64.
+        """
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
+    
+    def _encode_image_from_bytes(self, image_bytes: bytes) -> str:
+        """
+        Codifica bytes de imagem em base64.
+        
+        Args:
+            image_bytes: Bytes da imagem.
+            
+        Returns:
+            str: Imagem codificada em base64.
+        """
+        return base64.b64encode(image_bytes).decode('utf-8')
+    
+    @cached_description(CacheManager())
+    def generate_image_description(self, 
+                                  image_data: Union[str, bytes], 
+                                  is_path: bool = True) -> str:
+        """
+        Gera uma descrição detalhada da imagem usando OpenAI Vision.
+        
+        Args:
+            image_data: Caminho da imagem ou bytes da imagem.
+            is_path: Se True, image_data é um caminho. Se False, são bytes.
+            
+        Returns:
+            str: Descrição detalhada da imagem.
+        """
+        try:
+            # Verificar cache primeiro
+            if is_path:
+                cached_description = self.cache_manager.get_cached_description(image_data)
+                if cached_description:
+                    logger.info(f"Usando descrição em cache para {image_data}")
+                    return cached_description
+                    
+            # Codifica a imagem conforme o tipo de entrada
+            if is_path:
+                base64_image = self._encode_image(image_data)
+            else:
+                base64_image = self._encode_image_from_bytes(image_data)
+            
+            # Extrai o nome do arquivo se estiver disponível
+            filename = ""
+            if is_path:
+                filename = os.path.basename(image_data)
+                # Limpa o nome do arquivo para extrair informações úteis
+                filename = filename.replace('_220x220', '').replace('.jpg', '').replace('-', ' ').replace('_', ' ')
+            
+            logger.info(f"Gerando descrição para imagem: {os.path.basename(image_data) if is_path else 'bytes'}")
             
             response = self.client.chat.completions.create(
-                model=self.model,
+                model=self.vision_model,
                 messages=[
-                    {"role": "system", "content": "Você é um assistente especializado em moda que descreve imagens de roupas com precisão e detalhes."},
-                    {"role": "user", "content": [
-                        {"type": "text", "text": prompt},
-                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
-                    ]}
+                    {
+                        "role": "system",
+                        "content": (
+                            "Você é um especialista em moda com foco em análise detalhada de vestuário. "
+                            "Sua tarefa é analisar imagens de roupas e fornecer descrições estruturadas e precisas. "
+                            "Seja extremamente detalhado nas descrições de cores, padrões, estilos e características."
+                        )
+                    },
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "text", "text": f"""Descreva detalhadamente esta peça de roupa. 
+Nome do arquivo: {filename}
+
+Inclua especificamente as seguintes informações em formato estruturado:
+- Tipo de peça (exemplo: camisa, calça, vestido)
+- Ocasião de uso (exemplo: casual, formal, esportiva)
+- Cores predominantes
+- Padrão (exemplo: liso, listrado, floral)
+- Materiais aparentes
+- Estilo/estética
+- Gênero (masculino, feminino, unissex)
+- Estação do ano mais adequada
+
+Formate a resposta como um objeto JSON com estes campos e inclua um campo 'descrição_completa' com uma descrição narrativa.
+Seja extremamente detalhado e específico."""},
+                            {
+                                "type": "image_url",
+                                "image_url": {
+                                    "url": f"data:image/jpeg;base64,{base64_image}"
+                                }
+                            }
+                        ]
+                    }
                 ],
-                max_tokens=500
+                max_tokens=500,
+                temperature=0.2
             )
             
-            description_text = response.choices[0].message.content
+            description = response.choices[0].message.content
+            logger.debug(f"Descrição gerada com sucesso: {description[:50]}...")
             
-            try:
-                import json
-                import re
+            # Salva no cache se for um caminho de arquivo
+            if is_path:
+                self.cache_manager.cache_description(image_data, description)
                 
-                json_match = re.search(r'\{.*\}', description_text, re.DOTALL)
-                if json_match:
-                    description_json = json.loads(json_match.group(0))
-                else:
-                    description_json = {"description": description_text}
-                
-                logger.info(f"Descrição obtida com sucesso para {os.path.basename(image_path)}")
-                return description_json
-                
-            except json.JSONDecodeError:
-                logger.warning(f"Resposta não está em formato JSON para {image_path}. Retornando texto bruto.")
-                return {"description": description_text}
-                
+            return description
+            
         except Exception as e:
-            logger.error(f"Erro ao obter descrição para {image_path}: {str(e)}")
-            return {"error": str(e)}
+            logger.error(f"Erro ao gerar descrição da imagem: {str(e)}")
+            return "Erro ao processar a imagem."
     
-    def get_text_embedding(self, text: str) -> List[float]:
-        """Obtém embedding de um texto usando a API de embeddings da OpenAI."""
+    @cached_embedding(CacheManager())
+    def generate_embedding_from_text(self, text: str) -> List[float]:
+        """
+        Gera embeddings a partir de um texto usando a API da OpenAI.
+        
+        Args:
+            text: Texto para gerar o embedding.
+            
+        Returns:
+            List[float]: Vetor de embedding.
+        """
         try:
+            # Verificar cache primeiro
+            cached_embedding = self.cache_manager.get_cached_embedding(text)
+            if cached_embedding:
+                logger.info(f"Usando embedding em cache")
+                return cached_embedding
+                
+            logger.info("Gerando embedding para texto")
+            
             response = self.client.embeddings.create(
-                model=os.getenv("EMBEDDING_MODEL", "text-embedding-3-small"),
+                model=self.embedding_model,
                 input=text
             )
-            return response.data[0].embedding
+            
+            embedding = response.data[0].embedding
+            
+            # Salva no cache
+            self.cache_manager.cache_embedding(text, embedding)
+            
+            return embedding
+            
         except Exception as e:
-            logger.error(f"Erro ao obter embedding de texto: {str(e)}")
+            logger.error(f"Erro ao gerar embedding do texto: {str(e)}")
             raise
     
-    def process_image_folder(self, folder_path: str) -> List[Dict[str, Any]]:
-        """Processa todas as imagens em uma pasta e retorna uma lista de dicionários com metadados."""
-        if not os.path.exists(folder_path):
-            raise FileNotFoundError(f"Pasta não encontrada: {folder_path}")
-            
-        image_data = []
-        valid_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.webp'}
+    def process_image(self, 
+                     image_path: str, 
+                     image_id: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Processa uma imagem, gerando descrição e embedding.
         
-        for filename in os.listdir(folder_path):
-            file_path = os.path.join(folder_path, filename)
+        Args:
+            image_path: Caminho para a imagem.
+            image_id: ID único para a imagem. Se None, usa o nome do arquivo.
             
-            if os.path.isfile(file_path) and os.path.splitext(filename)[1].lower() in valid_extensions:
-                try:
-                    logger.info(f"Processando imagem: {filename}")
-                    
-                    description = self.get_image_description(file_path)
-                    
-                    if isinstance(description, dict) and "error" not in description:
-                        description_text = " ".join(str(v) for v in description.values() if v)
-                    else:
-                        description_text = str(description)
-                    
-                    embedding = self.get_text_embedding(description_text)
-                    
-                    image_data.append({
-                        "id": filename,
-                        "path": file_path,
-                        "description": description,
-                        "embedding": embedding
-                    })
-                    
-                except Exception as e:
-                    logger.error(f"Erro ao processar {filename}: {str(e)}")
-                    continue
-        
-        logger.info(f"Processadas {len(image_data)} imagens de {folder_path}")
-        return image_data
+        Returns:
+            Dict: Dados processados da imagem.
+        """
+        if not image_id:
+            image_id = os.path.basename(image_path)
+            
+        try:
+            # Gera a descrição da imagem
+            description = self.generate_image_description(image_path)
+            
+            # Gera o embedding a partir da descrição
+            embedding = self.generate_embedding_from_text(description)
+            
+            # Extrai metadados básicos da imagem
+            with Image.open(image_path) as img:
+                width, height = img.size
+                format_ = img.format
+                mode = img.mode
+            
+            return {
+                "id": image_id,
+                "path": image_path,
+                "description": description,
+                "embedding": embedding,
+                "metadata": {
+                    "filename": os.path.basename(image_path),
+                    "path": image_path,
+                    "width": width,
+                    "height": height,
+                    "format": format_,
+                    "mode": mode
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Erro ao processar imagem {image_path}: {str(e)}")
+            raise

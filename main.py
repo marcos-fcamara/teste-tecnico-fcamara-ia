@@ -46,6 +46,7 @@ def index_images(args):
 
 def search_images(args):
     """Realizar busca por texto no banco vetorial."""
+    
     logger.info(f"Realizando busca por: '{args.query}'")
     
     vector_db = VectorDatabase()

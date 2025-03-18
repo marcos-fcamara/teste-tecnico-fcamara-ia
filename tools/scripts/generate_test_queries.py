@@ -164,9 +164,9 @@ class QueryGenerator:
             return []
 
 def main():
-    descriptions_file = "test_descriptions.csv"
-    output_file = "ai_generated_queries.json"
-    text_output_file = "test_queries.txt"
+    descriptions_file = "../data/input/test_descriptions.csv"
+    output_file = "../data/input/ai_generated_queries.json"
+    text_output_file = "../data/input/test_queries.txt"
     
     if not os.path.exists(descriptions_file):
         logger.error(f"Arquivo de descrições não encontrado: {descriptions_file}")

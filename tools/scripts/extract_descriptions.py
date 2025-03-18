@@ -11,7 +11,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def extract_descriptions(cache_dir="../cache", output_file="test_descriptions.csv"):
+def extract_descriptions(cache_dir="../data/cache", output_file="../data/input/test_descriptions.csv"):
     """
     Extrai descrições de imagens dos arquivos JSON de cache e cria uma base de testes.
     """
@@ -101,7 +101,7 @@ def extract_descriptions(cache_dir="../cache", output_file="test_descriptions.cs
         logger.warning("Nenhum dado foi processado.")
         return None
 
-def generate_test_queries(df, num_queries=30, output_file="test_queries.txt"):
+def generate_test_queries(df, num_queries=30, output_file="../data/input/test_queries.txt"):
     """
     Gera consultas de teste com base nas descrições extraídas.
     """
@@ -158,4 +158,4 @@ if __name__ == "__main__":
     df = extract_descriptions()
     
     if df is not None:
-        generate_test_queries(df)
+        generate_test_queries(df, output_file="../data/input/test_queries.txt")

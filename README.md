@@ -17,7 +17,7 @@ Um sistema nativo em nuvem que permite busca em linguagem natural para itens de 
   - **Técnicas de cache**: Reduz chamadas repetidas à API, economizando custos
 
 2. **Embeddings e Busca Semântica**
-  - **OpenAI text-embedding-3-large**: Embeddings de alta dimensionalidade para maior precisão
+  - **OpenAI text-embedding-3-small**: Embeddings de alta dimensionalidade para maior precisão, associando custo e performance
   - **ChromaDB com FAISS**: Banco vetorial com algoritmo HNSW para buscas rápidas
   - **Parâmetros otimizados**: construction_ef=128, search_ef=96, M=16 para melhor qualidade/velocidade
 

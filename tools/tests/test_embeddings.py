@@ -10,8 +10,8 @@ from tabulate import tabulate
 from typing import List, Dict, Any, Tuple
 import json
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-os.environ["CHROMA_PERSIST_DIRECTORY"] = os.path.abspath(os.path.join(os.path.dirname(__file__), '../chroma_db'))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..','src')))
+os.environ["CHROMA_PERSIST_DIRECTORY"] = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../chroma_db'))
 
 from src.processing.indexer import ImageIndexer
 from src.processing.image_processor import ImageProcessor
@@ -24,7 +24,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def load_test_queries(queries_file: str = "test_queries.txt") -> List[str]:
+def load_test_queries(queries_file: str = "../data/input/test_queries.txt") -> List[str]:
     """Carrega consultas de teste de um arquivo."""
     if not os.path.exists(queries_file):
         logger.error(f"Arquivo de consultas não encontrado: {queries_file}")
@@ -41,7 +41,7 @@ def load_test_queries(queries_file: str = "test_queries.txt") -> List[str]:
     
     return queries
 
-def run_embedding_tests(queries: List[str], top_k: int = 3, output_dir: str = "./test_results"):
+def run_embedding_tests(queries: List[str], top_k: int = 3, output_dir: str = "../results/embeddings"):
     """Executa testes de embeddings para as consultas fornecidas."""
     if not queries:
         logger.error("Nenhuma consulta para testar.")
@@ -223,12 +223,12 @@ def generate_test_report(results_df: pd.DataFrame, output_dir: str):
 
 def main():
     parser = argparse.ArgumentParser(description="Teste de embeddings com consultas de exemplo")
-    parser.add_argument("--queries", type=str, default="test_queries.txt",
-                        help="Arquivo com consultas de teste")
+    parser.add_argument("--queries", type=str, default="../data/input/test_queries.txt",
+                      help="Arquivo com consultas de teste")
     parser.add_argument("--top-k", type=int, default=3,
                         help="Número de resultados por consulta")
-    parser.add_argument("--output-dir", type=str, default="./test_results",
-                        help="Diretório para salvar resultados")
+    parser.add_argument("--output-dir", type=str, default="../results/embeddings",
+                      help="Diretório para salvar resultados")
     
     args = parser.parse_args()
     
