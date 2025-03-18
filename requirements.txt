@@ -1,0 +1,9 @@
+openai
+chromadb
+python-dotenv
+pillow
+matplotlib
+tqdm
+numpy
+fastapi
+uvicorn
