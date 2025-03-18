@@ -3,7 +3,7 @@
 Sistema cloud-native que permite busca em linguagem natural por itens de moda, aproveitando os modelos de visão e embedding da OpenAI para entender e combinar descrições de roupas. O sistema processa imagens de moda, gera descrições detalhadas e permite busca semântica através de embeddings vetoriais.
 
 ### Frontend
-Acesse a interface web do sistema em: [Laboratório de Busca Semântica de Moda](https://seu-link-aqui.com)
+Acesse a interface web do sistema em: [Laboratório de Busca Semântica de Moda](https://llmragml8475209147.z13.web.core.windows.net/)
 
 ### Configuração Rápida
 Execute o script de configuração para criar automaticamente a estrutura necessária do projeto:
