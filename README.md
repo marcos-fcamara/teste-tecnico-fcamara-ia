@@ -1,4 +1,4 @@
-# Sistema de Busca Semântica de Moda
+# Sistema de Busca Semântica de Moda - Teste Técnico fCamara
 
 Sistema cloud-native que permite busca em linguagem natural por itens de moda, aproveitando os modelos de visão e embedding da OpenAI para entender e combinar descrições de roupas. O sistema processa imagens de moda, gera descrições detalhadas e permite busca semântica através de embeddings vetoriais.
 
