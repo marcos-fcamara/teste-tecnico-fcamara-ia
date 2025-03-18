@@ -20,7 +20,7 @@ class ImageProcessor:
             raise ValueError("API key da OpenAI não fornecida")
             
         self.client = OpenAI(api_key=self.api_key)
-        self.model = model or os.getenv("VISION_MODEL", "gpt-4-vision-preview")
+        self.model = model or os.getenv("VISION_MODEL")
         
     def encode_image(self, image_path: str) -> str:
         """Codifica uma imagem em base64 para envio à API."""

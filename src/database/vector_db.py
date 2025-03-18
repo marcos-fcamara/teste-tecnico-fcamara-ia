@@ -17,13 +17,8 @@ class VectorDatabase:
         
         os.makedirs(self.persist_directory, exist_ok=True)
         
-        self.client = chromadb.PersistentClient(
-            path=self.persist_directory,
-            settings=Settings(
-                anonymized_telemetry=False,
-                allow_reset=True
-            )
-        )
+        self.client = chromadb.PersistentClient(path=self.persist_directory)
+
         
         self.embedding_function = embedding_functions.OpenAIEmbeddingFunction(
             api_key=os.getenv("OPENAI_API_KEY"),
@@ -31,11 +26,17 @@ class VectorDatabase:
         )
         
         try:
-            self.collection = self.client.get_collection(
-                name=self.collection_name,
-                embedding_function=self.embedding_function
-            )
-            logger.info(f"Coleção '{self.collection_name}' conectada com sucesso.")
+            try:
+                self.collection = self.client.get_collection(
+                    name=self.collection_name
+                )
+                logger.info(f"Coleção '{self.collection_name}' conectada com sucesso.")
+            except chromadb.errors.InvalidCollectionException:
+                self.collection = self.client.create_collection(
+                    name=self.collection_name,
+                    metadata={"hnsw:space": "cosine"}
+                )
+                logger.info(f"Coleção '{self.collection_name}' criada com sucesso.")
         except ValueError:
             self.collection = self.client.create_collection(
                 name=self.collection_name,
