@@ -15,3 +15,4 @@ pydantic
 aiofiles
 httpx
 python-multipart
+tabulate
