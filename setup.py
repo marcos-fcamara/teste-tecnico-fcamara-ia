@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 def create_directories():
     """Cria a estrutura de diretórios necessária para o projeto."""
     directories = [
-        # Diretórios principais
         "src/data",
         "src/data/images",
         "src/data/processed",
@@ -26,13 +25,10 @@ def create_directories():
         "src/data/cache/embeddings",
         "src/data/cache/queries",
         
-        # Diretórios para o banco de dados vetorial
         "chroma_db",
         
-        # Diretórios para logs
         "logs",
         
-        # Diretórios para resultados de testes
         "tests_results"
     ]
     

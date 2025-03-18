@@ -2,8 +2,15 @@
 
 Sistema cloud-native que permite busca em linguagem natural por itens de moda, aproveitando os modelos de visão e embedding da OpenAI para entender e combinar descrições de roupas. O sistema processa imagens de moda, gera descrições detalhadas e permite busca semântica através de embeddings vetoriais.
 
-![Diagrama de Arquitetura](docs/containers.png)
+### Frontend
+Acesse a interface web do sistema em: [Laboratório de Busca Semântica de Moda](https://seu-link-aqui.com)
 
+### Configuração Rápida
+Execute o script de configuração para criar automaticamente a estrutura necessária do projeto:
+```bash
+python setup.py
+
+```
 ## Principais Características
 
 - Pipeline de processamento de imagem para qualidade consistente
@@ -29,8 +36,6 @@ teste-tecnico-fcamara/
 │   └── test_results/         # Relatórios de teste de embedding
 └── requirements.txt         # Dependências Python
 ```
-
-![Diagrama de Componentes](docs/components.png)
 
 ## Decisões Técnicas
 
@@ -101,25 +106,31 @@ teste-tecnico-fcamara/
 
 ## Exemplos de Consultas e Resultados
 
+Para diminuir e padronizar o tamanho das imagens no markdown, você pode adicionar parâmetros de dimensionamento dentro das tags de imagem. Aqui está uma versão atualizada com imagens de 150x150 pixels:
+
 ### Consulta: "Vestido boho estampado: Vestido curto, solto, estampado em azul e verde, mangas três quartos, decote V, estilo praiano."
 | Rank | Imagem | Tipo de Peça | Cores | Similaridade |
 |------|--------|--------------|-------|--------------|
-| 1 | ![Vestido](src/data/images/2015-new-style-casual-fashion-summer-dress-loose-printed-three-quarter-V-neck-sexy-mini-beach.jpg_220x220_normalized.jpg) | vestido | azul claro, verde, preto | 0.7346 |
-| 3 | ![Vestido](src/data/images/new-style-2015-sheath-summer-dress-three-quarter-printed-V-neck-chiffon-cotton-lace-beach-Mini.jpg_220x220_normalized.jpg) | vestido | branco, azul, laranja, verde | 0.7176 |
+| 1 | <img src="src/data/images/2015-new-style-casual-fashion-summer-dress-loose-printed-three-quarter-V-neck-sexy-mini-beach.jpg_220x220_normalized.jpg" width="150" height="150" alt="Vestido"> | vestido | azul claro, verde, preto | 0.7346 |
+| 3 | <img src="src/data/images/new-style-2015-sheath-summer-dress-three-quarter-printed-V-neck-chiffon-cotton-lace-beach-Mini.jpg_220x220_normalized.jpg" width="150" height="150" alt="Vestido"> | vestido | branco, azul, laranja, verde | 0.7176 |
 
 ### Consulta: "conjunto cropped e shorts estilo boêmio"
 | Rank | Imagem | Tipo de Peça | Cores | Similaridade |
 |------|--------|--------------|-------|--------------|
-| 1 | ![Conjunto](src/data/images/2015-Summer-style-2-piece-set-women-shorts-and-top-fashion-White-cropped-floral-print-pants.jpg_220x220.jpg) | Conjunto de top cropped e shorts | Branco, vermelho, rosa e azul | 0.7179 |
-| 2 | ![Conjunto](src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg) | Conjunto de duas peças (top e shorts) | Vermelho, Azul | 0.7069 |
-| 3 | ![Conjunto](src/data/images/2015-new-fashion-women-sexy-dresses-with-tassel-sleeveless-backless-twinset-dress-loose-irregular-sundress-above.jpg_220x220_normalized.jpg) | Conjunto de top e shorts | Azul e branco | 0.6964 |
+| 1 | <img src="src/data/images/2015-Summer-style-2-piece-set-women-shorts-and-top-fashion-White-cropped-floral-print-pants.jpg_220x220.jpg" width="150" height="150" alt="Conjunto"> | Conjunto de top cropped e shorts | Branco, vermelho, rosa e azul | 0.7179 |
+| 2 | <img src="src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg" width="150" height="150" alt="Conjunto"> | Conjunto de duas peças (top e shorts) | Vermelho, Azul | 0.7069 |
+| 3 | <img src="src/data/images/2015-new-fashion-women-sexy-dresses-with-tassel-sleeveless-backless-twinset-dress-loose-irregular-sundress-above.jpg_220x220_normalized.jpg" width="150" height="150" alt="Conjunto"> | Conjunto de top e shorts | Azul e branco | 0.6964 |
 
 ### Consulta: "roupa feminina de verão com estampa geométrica azul e branca"
 | Rank | Imagem | Tipo de Peça | Cores | Similaridade |
 |------|--------|--------------|-------|--------------|
-| 1 | ![Vestido](src/data/images/2015-new-arrival-summer-dress-A-line-printed-sleeveless-V-neck-chiffon-lace-cotton-mini-beach.jpg_220x220_normalized.jpg) | vestido | preto, branco, rosa | 0.7001 |
-| 2 | ![Conjunto](src/data/images/2015-new-style-Women-Dresses-element-pattern-short-Sleeve-Mini-Club-Party-Dress-.jpg_220x220_normalized.jpg) | Conjunto de blusa e saia | Branco e azul | 0.6960 |
-| 3 | ![Conjunto](src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg) | Conjunto de duas peças (top e shorts) | Vermelho, Azul | 0.6896 |
+| 1 | <img src="src/data/images/2015-new-arrival-summer-dress-A-line-printed-sleeveless-V-neck-chiffon-lace-cotton-mini-beach.jpg_220x220_normalized.jpg" width="150" height="150" alt="Vestido"> | vestido | preto, branco, rosa | 0.7001 |
+| 2 | <img src="src/data/images/2015-new-style-Women-Dresses-element-pattern-short-Sleeve-Mini-Club-Party-Dress-.jpg_220x220_normalized.jpg" width="150" height="150" alt="Conjunto"> | Conjunto de blusa e saia | Branco e azul | 0.6960 |
+| 3 | <img src="src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg" width="150" height="150" alt="Conjunto"> | Conjunto de duas peças (top e shorts) | Vermelho, Azul | 0.6896 |
+
+## Distribuição de similaridade
+
+<img src="docs/similarity_distribution.png" width="600" alt="Gráfico">
 
 ## Instalação e Uso Rápido
 

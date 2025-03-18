@@ -31,13 +31,11 @@ class CacheManager:
         self.descriptions_dir = os.path.join(cache_dir, "descriptions")
         self.queries_dir = os.path.join(cache_dir, "queries")
         
-        # Cria os diretórios de cache
         os.makedirs(self.cache_dir, exist_ok=True)
         os.makedirs(self.embeddings_dir, exist_ok=True)
         os.makedirs(self.descriptions_dir, exist_ok=True)
         os.makedirs(self.queries_dir, exist_ok=True)
         
-        # Contadores para estatísticas
         self.cache_hits = 0
         self.cache_misses = 0
         
@@ -89,7 +87,6 @@ class CacheManager:
         Returns:
             Optional[str]: Descrição em cache ou None se não encontrada.
         """
-        # Gera a chave a partir do caminho e do timestamp de modificação
         mtime = os.path.getmtime(image_path)
         key = self._generate_key(f"{image_path}_{mtime}")
         file_path = self._get_file_path(key, "descriptions")
@@ -119,7 +116,6 @@ class CacheManager:
         Returns:
             bool: True se o cache foi bem-sucedido.
         """
-        # Gera a chave a partir do caminho e do timestamp de modificação
         mtime = os.path.getmtime(image_path)
         key = self._generate_key(f"{image_path}_{mtime}")
         file_path = self._get_file_path(key, "descriptions")
@@ -212,7 +208,6 @@ class CacheManager:
         key = self._generate_key(f"{query}_{limit}")
         file_path = self._get_file_path(key, "queries")
         
-        # Verifica se o cache existe e não está expirado (1 hora)
         if os.path.exists(file_path) and (time.time() - os.path.getmtime(file_path)) < 3600:
             try:
                 with open(file_path, 'rb') as f:
@@ -293,7 +288,6 @@ class CacheManager:
         return removed
 
 
-# Decoradores para uso com funções
 def cached_description(cache_manager: CacheManager):
     """
     Decorador para cachear descrições de imagens.
