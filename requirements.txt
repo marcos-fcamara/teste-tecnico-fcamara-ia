@@ -16,3 +16,4 @@ aiofiles
 httpx
 python-multipart
 tabulate
+pandas

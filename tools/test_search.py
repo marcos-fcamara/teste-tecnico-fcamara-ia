@@ -14,24 +14,19 @@ if not os.path.exists(output_dir):
 
 os.environ["CHROMA_PERSIST_DIRECTORY"] = os.path.abspath(os.path.join(os.path.dirname(__file__), '../chroma_db'))
 
-# Importar componentes do projeto
 from processing.indexer import ImageIndexer
 from processing.image_processor import ImageProcessor
 from database.vector_db import VectorDatabase
 
-# Carregar variáveis de ambiente
 load_dotenv()
 
-# Configurar logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
-# Consultas de teste
 TEST_QUERIES = [
-    #Consulta voltada ao datasset
     "roupa feminina de verão com estampa geométrica azul e branca",
     "conjunto cropped e shorts estilo boêmio",
     "look casual feminino azul e branco para verão",
@@ -53,7 +48,6 @@ TEST_QUERIES = [
     "peça básica em cor neutra",
     "item de moda com padrão listrado",
     "acessório fashion para complementar visual",
-    # Consultas mais específicas
     "camiseta branca básica de algodão",
     "vestido preto curto para festa noturna",
     "casaco azul marinho para inverno",
@@ -64,7 +58,6 @@ TEST_QUERIES = [
     "shorts jeans desfiado casual",
     "camisa social slim fit azul clara",
     "moletom oversized cinza com capuz",
-    # Consultas por estilo/ocasião
     "roupa para ambiente corporativo formal",
     "look despojado para fim de semana",
     "traje para evento ao ar livre no verão",
@@ -151,7 +144,6 @@ def run_test_searches():
         sys.exit(1)
 
 if __name__ == "__main__":
-    # Verificar API Key
     if not os.getenv("OPENAI_API_KEY"):
         logger.error("API key da OpenAI não configurada. Configure a variável de ambiente OPENAI_API_KEY.")
         sys.exit(1)

@@ -1,0 +1,62 @@
+[
+  {
+    "query": "Comprar meia calça com perneiras para dança",
+    "categoria": "Meia calça com perneiras",
+    "intenção": "Usuário quer adquirir meias calças com perneiras específicas para atividades de dança"
+  },
+  {
+    "query": "Conjunto de biquíni estampado feminino para praia",
+    "categoria": "Conjunto de biquíni",
+    "intenção": "Usuário busca um conjunto de biquíni com estampas para uso na praia"
+  },
+  {
+    "query": "Conjunto de duas peças casual feminino",
+    "categoria": "Conjunto de duas peças",
+    "intenção": "Usuário quer encontrar um conjunto casual de duas peças para uso diário"
+  },
+  {
+    "query": "vestidos de verão leves para passeio ao ar livre",
+    "categoria": "Verão, descontraído",
+    "intenção": "O usuário está procurando por vestidos adequados para atividades ao ar livre durante o verão, que sejam leves e descontraídos."
+  },
+  {
+    "query": "blusas românticas com detalhes em renda para encontro à noite",
+    "categoria": "Romântico, elegante",
+    "intenção": "O usuário deseja encontrar blusas com um toque romântico e elegante, ideal para um encontro noturno, enfatizando detalhes como renda."
+  },
+  {
+    "query": "saia boho chic com franjas para festival de música",
+    "categoria": "Boho chic com detalhe de franjas",
+    "intenção": "O usuário está buscando uma saia no estilo boho chic com franjas, apropriada para usar em um festival de música."
+  },
+  {
+    "query": "jaquetas leves para noites frescas de primavera",
+    "categoria": "Primavera",
+    "intenção": "Encontrar jaquetas adequadas para a temperatura amena típica das noites de primavera"
+  },
+  {
+    "query": "botas impermeáveis para trilhas no outono",
+    "categoria": "Outono",
+    "intenção": "Buscar botas que sejam resistentes à água e apropriadas para caminhadas em terrenos úmidos típicos do outono"
+  },
+  {
+    "query": "casacos de inverno para temperaturas abaixo de zero",
+    "categoria": "Inverno",
+    "intenção": "Achar casacos que ofereçam proteção adequada contra temperaturas extremamente baixas do inverno"
+  },
+  {
+    "query": "vestido de festa em tons de rosa e branco",
+    "categoria": "Rosa e branco",
+    "intenção": "O usuário está procurando por um vestido de festa que combine as cores rosa e branco."
+  },
+  {
+    "query": "camisa masculina bordô e rosa para eventos casuais",
+    "categoria": "Bordô e rosa",
+    "intenção": "O usuário deseja encontrar uma camisa masculina com as cores bordô e rosa para usar em eventos casuais."
+  },
+  {
+    "query": "blusa feminina lilás para uso diário",
+    "categoria": "Lilás",
+    "intenção": "O usuário está em busca de uma blusa feminina na cor lilás adequada para o uso cotidiano."
+  }
+]

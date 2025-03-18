@@ -1,0 +1,1053 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Relatório de Teste de Embeddings</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+            table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+            th, td { padding: 8px; text-align: left; border: 1px solid #ddd; }
+            th { background-color: #f2f2f2; }
+            tr:nth-child(even) { background-color: #f9f9f9; }
+            h1, h2, h3 { color: #333; }
+            .metrics { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
+            .metric-card { background-color: #f9f9f9; padding: 15px; border-radius: 5px; flex: 1; min-width: 200px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+            .metric-value { font-size: 24px; font-weight: bold; margin: 10px 0; }
+            .query-section { margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+            img { max-width: 100%; height: auto; margin: 20px 0; }
+        </style>
+    </head>
+    <body>
+        <h1>Relatório de Teste de Embeddings</h1>
+        
+        <h2>Métricas Gerais</h2>
+        <div class="metrics">
+            <div class="metric-card">
+                <h3>Número de Consultas</h3>
+                <div class="metric-value">25</div>
+            </div>
+            <div class="metric-card">
+                <h3>Similaridade Média</h3>
+                <div class="metric-value">0.6558</div>
+            </div>
+        </div>
+        
+        <h2>Distribuição de Similaridade</h2>
+        <img src="similarity_distribution.png" alt="Distribuição de Similaridade">
+        
+        <h2>Similaridade por Posição no Ranking</h2>
+        <img src="rank_similarity.png" alt="Similaridade por Rank">
+        
+        <h2>Similaridade por Rank</h2>
+        <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>mean</th>
+      <th>min</th>
+      <th>max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>0.6683</td>
+      <td>0.6162</td>
+      <td>0.7211</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>0.6538</td>
+      <td>0.5950</td>
+      <td>0.7181</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>0.6452</td>
+      <td>0.5806</td>
+      <td>0.7055</td>
+    </tr>
+  </tbody>
+</table>
+        
+        <h2>Resultados por Consulta</h2>
+    
+        <div class="query-section">
+            <h3>Consulta: ""Conjunto com cropped e shorts verde para um look boho""</h3>
+            <p>Similaridade Média: <strong>0.6847</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>-2015-Women-two-pieces-set-summer-jumpsuit-solid-Lace-stitching-tassel-backless-hollow-out-rompers.jpg_220x220.jpg</td>
+      <td>0.7025</td>
+      <td>Conjunto com cropped e shorts</td>
+      <td>Branco com detalhes azuis e laranja (à esquerda), Branco (à direita)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-New-summer-Jumpsuits-Print-Fashion-Regular-Shorts-party-beach-women-jumpsuits.jpg_220x220.jpg</td>
+      <td>0.6912</td>
+      <td>Conjunto de top cropped e shorts</td>
+      <td>Azul marinho e branco</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2015-new-style-Women-Dresses-element-pattern-short-Sleeve-Mini-Club-Party-Dress-.jpg_220x220.jpg</td>
+      <td>0.6603</td>
+      <td>Conjunto de top e shorts</td>
+      <td>Branco e azul</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Vestido curto rosa para festa de verão""</h3>
+            <p>Similaridade Média: <strong>0.6794</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>New-design-2015-fashion-mini-dress-fashion-printed-sleeveless-summer-dresses-party-and-beach-sexy-dresses.jpg_220x220.jpg</td>
+      <td>0.6836</td>
+      <td>Vestido</td>
+      <td>Rosa, Branco e Prateado</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>winter-and-spring-hot-selling-fashion-mini-dresses-cute-women-clothing-backless-party-and-club-mini.jpg_220x220.jpg</td>
+      <td>0.6821</td>
+      <td>Vestido curto</td>
+      <td>['Branco', 'Vermelho']</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2015-Newest-Elegant-Cute-Women-Party-Dress-Sexy-Stylish-red-stitching-lace-tutu-dress-Bra-Party.jpg_220x220.jpg</td>
+      <td>0.6725</td>
+      <td>Vestido</td>
+      <td>Rosa</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Body amarelo descontraído para usar no verão""</h3>
+            <p>Similaridade Média: <strong>0.6364</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>New-2015-Summer-Short-Overalls-Jumpsuit-Women-Sexy-Rompers-Womens-Jumpsuit-.jpg_220x220.jpg</td>
+      <td>0.6497</td>
+      <td>Vestido curto</td>
+      <td>Azul e amarelo</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-women-print-jumpsuit-short-sleeveless-summer-work-club-jumpsuit-feminino-women-macacaos.jpg_220x220.jpg</td>
+      <td>0.6339</td>
+      <td>Macaquinho</td>
+      <td>Azul e amarelo</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2015-dress-new-fashion-women-s-bandage-dresses-with-Bow-for-women-cute-mini-free-shipping.jpg_220x220.jpg</td>
+      <td>0.6256</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Robe curto preto e moderno para outono""</h3>
+            <p>Similaridade Média: <strong>0.6463</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>New-Spring-Autumn-Woman-Casual-OL-Solid-Elegant-Basic-Sexy-Lace-Dress-Bodycon-party-dresses-Vestidos.jpg_220x220.jpg</td>
+      <td>0.6516</td>
+      <td>Vestido</td>
+      <td>Preto</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-manga-comprida-bodycon-formal-vestido-escrit&amp;oacute_rio-mulheres-l&amp;aacute_pis-bainha-partido-mini-vestidos-casual-xadrez-elegante.jpg_220x220.jpg</td>
+      <td>0.6447</td>
+      <td>Vestido</td>
+      <td>Preto e branco</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2015-summer-women-s-V-neck-long-sleeved-black-jumpsuits-have-waistband-mini-jumpsuits-fashion-sexy.jpg_220x220.jpg</td>
+      <td>0.6427</td>
+      <td>Robe curto</td>
+      <td>Branco e preto</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Conjunto de top e saia marrom e rosa para uma festa casual""</h3>
+            <p>Similaridade Média: <strong>0.6302</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Selljimshop-1PC-Sexy-Women-Sleeveless-Strap-Floral-Painting-Bohemia-Jumpsuit-Rompers-Plus-size.jpg_220x220.jpg</td>
+      <td>0.6353</td>
+      <td>Conjunto de top e shorts</td>
+      <td>Rosa, roxo, azul e branco</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-new-fashion-women-s-white-striped-casual-two-pieces-irregular-long-party-sheath-dress-summer.jpg_220x220.jpg</td>
+      <td>0.6339</td>
+      <td>Conjunto de top cropped e saia longa</td>
+      <td>Branco e cinza</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Free-Shipping-2015-New-Fashion-Women-Spaghetti-Strap-V-Neck-Tassel-Sexy-Jumpsuit-Floral-Print-2.jpg_220x220.jpg</td>
+      <td>0.6215</td>
+      <td>Conjunto de top e shorts</td>
+      <td>Roxo e branco</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Vestido curto branco para usar na primavera""</h3>
+            <p>Similaridade Média: <strong>0.7030</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>winter-and-spring-hot-selling-fashion-mini-dresses-cute-women-clothing-backless-party-and-club-mini.jpg_220x220.jpg</td>
+      <td>0.7096</td>
+      <td>Vestido curto</td>
+      <td>['Branco', 'Vermelho']</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>New-Arrival-2015-Summer-White-Lace-Dress-Europe-Women-Sexy-Dresses-Black-Package-Hip-Mini-Dress.jpg_220x220.jpg</td>
+      <td>0.7015</td>
+      <td>Vestido</td>
+      <td>Branco</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Free-shipping-new-fashion-sexy-women-s-clothing-spring-summer-2015-Europe-and-deep-v-cut.jpg_220x220.jpg</td>
+      <td>0.6980</td>
+      <td>Vestido</td>
+      <td>Branco</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Conjunto com cropped e shorts azul claro e lilás para um look praiano""</h3>
+            <p>Similaridade Média: <strong>0.7149</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>-2015-Women-two-pieces-set-summer-jumpsuit-solid-Lace-stitching-tassel-backless-hollow-out-rompers.jpg_220x220.jpg</td>
+      <td>0.7211</td>
+      <td>Conjunto com cropped e shorts</td>
+      <td>Branco com detalhes azuis e laranja (à esquerda), Branco (à direita)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>rompers-womens-jumpsuit-2015-fashion-Gray-blue-Apron-style-roupas-femininas-bodysuit-overalls-for-women.jpg_220x220.jpg</td>
+      <td>0.7181</td>
+      <td>Conjunto de top cropped e shorts</td>
+      <td>Azul claro</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2015-New-summer-Jumpsuits-Print-Fashion-Regular-Shorts-party-beach-women-jumpsuits.jpg_220x220.jpg</td>
+      <td>0.7055</td>
+      <td>Conjunto de top cropped e shorts</td>
+      <td>Azul marinho e branco</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Body branco com listras pretas para uma festa de outono""</h3>
+            <p>Similaridade Média: <strong>0.6135</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2015-women-jumpsuit-with-deep-v-neck-and-adjustable-straps-at-back-Sexy-print-splicing-backless.jpg_220x220.jpg</td>
+      <td>0.6172</td>
+      <td>Vestido curto</td>
+      <td>Branco e preto</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-new-casual-fashion-summer-dress-A-line-white-sleeveless-V-neck-sexy-mini-striped-beach.jpg_220x220.jpg</td>
+      <td>0.6170</td>
+      <td>Vestido</td>
+      <td>Branco e preto</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Free-Shipping-2014-Korean-Style-New-Women-s-Autumn-Black-Lace-long-Sleeve-Sexy-Bag-hip.jpg_220x220.jpg</td>
+      <td>0.6061</td>
+      <td>Vestido</td>
+      <td>Preto e branco</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Robe curto vermelho e preto para uma ocasião casual""</h3>
+            <p>Similaridade Média: <strong>0.6291</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Mulheres-vestidos-de-inverno-xadrez-decote-em-v-festa-&amp;agrave_-noite-elegante-cl&amp;aacute_ssica-a-linha-marca.jpg_220x220.jpg</td>
+      <td>0.6511</td>
+      <td>Vestido</td>
+      <td>Vermelho e preto</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-summer-women-s-V-neck-long-sleeved-black-jumpsuits-have-waistband-mini-jumpsuits-fashion-sexy.jpg_220x220.jpg</td>
+      <td>0.6188</td>
+      <td>Robe curto</td>
+      <td>Branco e preto</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>winter-and-spring-hot-selling-fashion-mini-dresses-cute-women-clothing-backless-party-and-club-mini.jpg_220x220.jpg</td>
+      <td>0.6174</td>
+      <td>Vestido curto</td>
+      <td>['Branco', 'Vermelho']</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Conjunto de top e saia leve e descontraído para o verão""</h3>
+            <p>Similaridade Média: <strong>0.7076</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2015-new-fashion-women-s-white-striped-casual-two-pieces-irregular-long-party-sheath-dress-summer.jpg_220x220.jpg</td>
+      <td>0.7112</td>
+      <td>Conjunto de top cropped e saia longa</td>
+      <td>Branco e cinza</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Brand-New-Ladies-Women-Summer-Casual-Dresses-Sleeveless-Sexy-Backless-Two-Piece-Set-Women-Slim-Dress.jpg_220x220.jpg</td>
+      <td>0.7072</td>
+      <td>Conjunto de top cropped e saia</td>
+      <td>Branco e azul claro</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>rompers-womens-jumpsuit-2015-fashion-Gray-blue-Apron-style-roupas-femininas-bodysuit-overalls-for-women.jpg_220x220.jpg</td>
+      <td>0.7043</td>
+      <td>Conjunto de top cropped e shorts</td>
+      <td>Azul claro</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Vestido curto verde para uma festa moderna""</h3>
+            <p>Similaridade Média: <strong>0.6272</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2015-summer-woman-jumpsuits-sky-blue-V-neck-Long-Slim-Hot-sexy-fashion-casual-suit-mini.jpg_220x220.jpg</td>
+      <td>0.6460</td>
+      <td>Vestido curto</td>
+      <td>Verde menta</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>s.jpg_220x220.jpg</td>
+      <td>0.6299</td>
+      <td>Vestido</td>
+      <td>Verde aqua</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>New-arrival-lady-mangas-vestido-de-renda-mini-vestido-2015-Sexy-halter-bodycon-Sexy-vestidos-de.jpg_220x220.jpg</td>
+      <td>0.6055</td>
+      <td>Vestido</td>
+      <td>['Roxo', 'Azul']</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Body preto para um look casual no inverno""</h3>
+            <p>Similaridade Média: <strong>0.6119</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2015-manga-comprida-bodycon-formal-vestido-escrit&amp;oacute_rio-mulheres-l&amp;aacute_pis-bainha-partido-mini-vestidos-casual-xadrez-elegante.jpg_220x220.jpg</td>
+      <td>0.6236</td>
+      <td>Vestido</td>
+      <td>Preto e branco</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Free-Shipping-2014-Korean-Style-New-Women-s-Autumn-Black-Lace-long-Sleeve-Sexy-Bag-hip.jpg_220x220.jpg</td>
+      <td>0.6098</td>
+      <td>Vestido</td>
+      <td>Preto e branco</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>S-XXL-2015-New-Vestidos-Femininos-Women-Long-Sleeve-Spring-Dress-Sexy-Bodycon-Lace-Dress-Club.jpg_220x220.jpg</td>
+      <td>0.6021</td>
+      <td>Vestido</td>
+      <td>Preto (imagem à esquerda), Branco (imagem à direita)</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Conjunto com cropped e shorts despojado para a primavera""</h3>
+            <p>Similaridade Média: <strong>0.6879</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>-2015-Women-two-pieces-set-summer-jumpsuit-solid-Lace-stitching-tassel-backless-hollow-out-rompers.jpg_220x220.jpg</td>
+      <td>0.7023</td>
+      <td>Conjunto com cropped e shorts</td>
+      <td>Branco com detalhes azuis e laranja (à esquerda), Branco (à direita)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-cheap-clothes-china-novelty-women-jumpsuit-rompers-Two-pieces-set-hollow-out-strap-bodysuit-Floral.jpg_220x220.jpg</td>
+      <td>0.6847</td>
+      <td>Conjunto (top cropped e shorts)</td>
+      <td>Branco com estampas florais em azul, rosa e verde</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2015-New-summer-Jumpsuits-Print-Fashion-Regular-Shorts-party-beach-women-jumpsuits.jpg_220x220.jpg</td>
+      <td>0.6767</td>
+      <td>Conjunto de top cropped e shorts</td>
+      <td>Azul marinho e branco</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Robe curto amarelo para uma festa de verão""</h3>
+            <p>Similaridade Média: <strong>0.6192</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>New-2015-Summer-Short-Overalls-Jumpsuit-Women-Sexy-Rompers-Womens-Jumpsuit-.jpg_220x220.jpg</td>
+      <td>0.6521</td>
+      <td>Vestido curto</td>
+      <td>Azul e amarelo</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-dress-new-fashion-women-s-bandage-dresses-with-Bow-for-women-cute-mini-free-shipping.jpg_220x220.jpg</td>
+      <td>0.6070</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>winter-and-spring-hot-selling-fashion-mini-dresses-cute-women-clothing-backless-party-and-club-mini.jpg_220x220.jpg</td>
+      <td>0.5983</td>
+      <td>Vestido curto</td>
+      <td>['Branco', 'Vermelho']</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Vestido curto branco para um look casual de primavera""</h3>
+            <p>Similaridade Média: <strong>0.7059</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>winter-and-spring-hot-selling-fashion-mini-dresses-cute-women-clothing-backless-party-and-club-mini.jpg_220x220.jpg</td>
+      <td>0.7197</td>
+      <td>Vestido curto</td>
+      <td>['Branco', 'Vermelho']</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>floral-print-bohemian-beach-sexy-white-lace-shorts-rompers-2015-new-fashion-women-s-summer-wear.jpg_220x220.jpg</td>
+      <td>0.7034</td>
+      <td>Vestido curto</td>
+      <td>Branco e azul</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2014-New-Summer-Fashion-Short-sleeve-Slim-Lace-One-piece-Dress-Women-Casual-Patchwork-Dresses-Hollow.jpg_220x220.jpg</td>
+      <td>0.6946</td>
+      <td>Vestido</td>
+      <td>Branco</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Conjunto de top e saia boho para uma festa de verão""</h3>
+            <p>Similaridade Média: <strong>0.6984</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2-piece-set-women-shorts-and-top-twinset-dress-summer-2015-Off-The-Shoulder-print-Boho.jpg_220x220.jpg</td>
+      <td>0.7099</td>
+      <td>Conjunto de top ombro a ombro e saia curta</td>
+      <td>Azul e branco</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>New-Jumpsuit.jpg_220x220.jpg</td>
+      <td>0.6940</td>
+      <td>Conjunto de top e saia</td>
+      <td>Branco</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg</td>
+      <td>0.6913</td>
+      <td>Conjunto de top e shorts</td>
+      <td>Vermelho e azul</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Body azul claro e lilás para usar na praia""</h3>
+            <p>Similaridade Média: <strong>0.6370</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Good-Quality-2015-Navy-Blue-Lace-Stitching-Jumpsuit-Sexy-Womens-Short-Backless-Jumpsuits-Strap-V-Neck.jpg_220x220.jpg</td>
+      <td>0.6524</td>
+      <td>Body</td>
+      <td>Azul e branco</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>mono-mujer-two-pices-2015-Sexy-rompers-womens-jumpsuit-black-print-sleeveless-v-neck-Hot-Pants.jpg_220x220.jpg</td>
+      <td>0.6304</td>
+      <td>Conjunto de biquíni</td>
+      <td>Azul e branco</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Xiaomao-ball-beach-in-the-summer-of-2015-the-latest-lace-dress-sets-tassel-blouse-is.jpg_220x220.jpg</td>
+      <td>0.6281</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Robe curto rosa para uma ocasião casual no outono""</h3>
+            <p>Similaridade Média: <strong>0.6412</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2015-summer-women-s-V-neck-long-sleeved-black-jumpsuits-have-waistband-mini-jumpsuits-fashion-sexy.jpg_220x220.jpg</td>
+      <td>0.6570</td>
+      <td>Robe curto</td>
+      <td>Branco e preto</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-Newest-Elegant-Cute-Women-Party-Dress-Sexy-Stylish-red-stitching-lace-tutu-dress-Bra-Party.jpg_220x220.jpg</td>
+      <td>0.6347</td>
+      <td>Vestido</td>
+      <td>Rosa</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Fashion-Summer-Women-Lace-Off-Shoulder-Dress-V-neck-Beach-Mini-Bohemia-Dresses-2015-Clothes.jpg_220x220.jpg</td>
+      <td>0.6320</td>
+      <td>Vestido</td>
+      <td>Rosa claro</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Conjunto com cropped e shorts preto para um look descontraído de inverno""</h3>
+            <p>Similaridade Média: <strong>0.6367</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Top-quality-new-2015-summer-shorts-jumpsuit-2-piece-bodycon-jumpsuit-women-print-jumpsuit-.jpg_220x220.jpg</td>
+      <td>0.6619</td>
+      <td>Conjunto de shorts e cropped top</td>
+      <td>Branco e preto</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-women-jumpsuit-short-sleeveless-summer-chiffon-lace-loose-beach-jumpsuit-feminino-women-macacao.jpg_220x220.jpg</td>
+      <td>0.6247</td>
+      <td>Conjunto de blusa e shorts</td>
+      <td>Branco e preto</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>-2015-Women-two-pieces-set-summer-jumpsuit-solid-Lace-stitching-tassel-backless-hollow-out-rompers.jpg_220x220.jpg</td>
+      <td>0.6235</td>
+      <td>Conjunto com cropped e shorts</td>
+      <td>Branco com detalhes azuis e laranja (à esquerda), Branco (à direita)</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Vestido curto marrom e rosa para uma festa de primavera""</h3>
+            <p>Similaridade Média: <strong>0.6470</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Autumn-2015-European-American-style-women-summer-party-dress-short-sleeve-Novelty-snake-dresses-O-neck.jpg_220x220.jpg</td>
+      <td>0.6537</td>
+      <td>Vestido</td>
+      <td>Marrom</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>New-design-2015-fashion-mini-dress-fashion-printed-sleeveless-summer-dresses-party-and-beach-sexy-dresses.jpg_220x220.jpg</td>
+      <td>0.6448</td>
+      <td>Vestido</td>
+      <td>Rosa, Branco e Prateado</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2015-Spring-New-Arrival-Plus-Size-S-XXL-Sexy-Black-V-neck-Floral-Print-Loose-Romper.jpg_220x220.jpg</td>
+      <td>0.6426</td>
+      <td>Vestido curto</td>
+      <td>Preto, rosa, branco</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Body vermelho e preto para uma noite de festa no inverno""</h3>
+            <p>Similaridade Média: <strong>0.6096</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2015-spring-elegant-long-sleeve-lace-one-piece-dress-long-basic-female-cute-sweet-gentlewoman-ruffled.jpg_220x220.jpg</td>
+      <td>0.6162</td>
+      <td>Vestido</td>
+      <td>Preto</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Mulheres-vestidos-de-inverno-xadrez-decote-em-v-festa-&amp;agrave_-noite-elegante-cl&amp;aacute_ssica-a-linha-marca.jpg_220x220.jpg</td>
+      <td>0.6135</td>
+      <td>Vestido</td>
+      <td>Vermelho e preto</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Free-Shipping-2014-Korean-Style-New-Women-s-Autumn-Black-Lace-long-Sleeve-Sexy-Bag-hip.jpg_220x220.jpg</td>
+      <td>0.5990</td>
+      <td>Vestido</td>
+      <td>Preto e branco</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Conjunto de top e saia branco com listras pretas para um evento casual""</h3>
+            <p>Similaridade Média: <strong>0.7085</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>-Women-Short-Sleeve-Chiffon-Shirt-Blouse-Striped-Shorts-Hot-Pants-Sets.jpg_220x220.jpg</td>
+      <td>0.7187</td>
+      <td>Conjunto de top e shorts</td>
+      <td>Branco com listras pretas</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-new-fashion-women-s-white-striped-casual-two-pieces-irregular-long-party-sheath-dress-summer.jpg_220x220.jpg</td>
+      <td>0.7039</td>
+      <td>Conjunto de top cropped e saia longa</td>
+      <td>Branco e cinza</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Plus-Size-Women-Lady-Sleeveless-Summer-Chiffon-Striped-Shorts-Jumpsuits-Clubwear-With-Belt-2PCS-Shorts-Sets.jpg_220x220.jpg</td>
+      <td>0.7028</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Robe curto verde para um look leve de outono""</h3>
+            <p>Similaridade Média: <strong>0.5985</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2015-summer-woman-jumpsuits-sky-blue-V-neck-Long-Slim-Hot-sexy-fashion-casual-suit-mini.jpg_220x220.jpg</td>
+      <td>0.6200</td>
+      <td>Vestido curto</td>
+      <td>Verde menta</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2015-summer-women-s-V-neck-long-sleeved-black-jumpsuits-have-waistband-mini-jumpsuits-fashion-sexy.jpg_220x220.jpg</td>
+      <td>0.5950</td>
+      <td>Robe curto</td>
+      <td>Branco e preto</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>s.jpg_220x220.jpg</td>
+      <td>0.5806</td>
+      <td>Vestido</td>
+      <td>Verde aqua</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Vestido curto despojado para usar na praia""</h3>
+            <p>Similaridade Média: <strong>0.6537</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>2015-women-jumpsuit-with-deep-v-neck-and-adjustable-straps-at-back-Sexy-print-splicing-backless.jpg_220x220.jpg</td>
+      <td>0.6593</td>
+      <td>Vestido curto</td>
+      <td>Branco e preto</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>winter-and-spring-hot-selling-fashion-mini-dresses-cute-women-clothing-backless-party-and-club-mini.jpg_220x220.jpg</td>
+      <td>0.6557</td>
+      <td>Vestido curto</td>
+      <td>['Branco', 'Vermelho']</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>new-style-2015-sheath-summer-dress-three-quarter-printed-V-neck-chiffon-cotton-lace-beach-Mini.jpg_220x220.jpg</td>
+      <td>0.6460</td>
+      <td>Vestido curto</td>
+      <td>Branco, azul, verde, laranja</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="query-section">
+            <h3>Consulta: ""Conjunto com cropped e shorts amarelo para um look de verão""</h3>
+            <p>Similaridade Média: <strong>0.6662</strong></p>
+            <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>rank</th>
+      <th>image_id</th>
+      <th>similarity</th>
+      <th>tipo_peca</th>
+      <th>cores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>-2015-Women-two-pieces-set-summer-jumpsuit-solid-Lace-stitching-tassel-backless-hollow-out-rompers.jpg_220x220.jpg</td>
+      <td>0.6808</td>
+      <td>Conjunto com cropped e shorts</td>
+      <td>Branco com detalhes azuis e laranja (à esquerda), Branco (à direita)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>rompers-womens-jumpsuit-2015-fashion-Gray-blue-Apron-style-roupas-femininas-bodysuit-overalls-for-women.jpg_220x220.jpg</td>
+      <td>0.6656</td>
+      <td>Conjunto de top cropped e shorts</td>
+      <td>Azul claro</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Top-quality-new-2015-summer-shorts-jumpsuit-2-piece-bodycon-jumpsuit-women-print-jumpsuit-.jpg_220x220.jpg</td>
+      <td>0.6521</td>
+      <td>Conjunto de shorts e cropped top</td>
+      <td>Branco e preto</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+    </body>
+    </html>
+    
