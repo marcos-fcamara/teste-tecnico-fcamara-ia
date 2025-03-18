@@ -9,3 +9,9 @@ fastapi
 uvicorn
 torch
 torchvision
+pytest
+requests
+pydantic
+aiofiles
+httpx
+python-multipart

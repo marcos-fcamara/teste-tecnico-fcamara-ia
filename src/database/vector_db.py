@@ -27,7 +27,7 @@ class VectorDatabase:
         
         self.embedding_function = embedding_functions.OpenAIEmbeddingFunction(
             api_key=os.getenv("OPENAI_API_KEY"),
-            model_name=os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
+            model_name=os.getenv("EMBEDDING_MODEL")
         )
         
         try:

@@ -106,7 +106,7 @@ class ImageProcessor:
         """Obtém embedding de um texto usando a API de embeddings da OpenAI."""
         try:
             response = self.client.embeddings.create(
-                model=os.getenv("EMBEDDING_MODEL", "text-embedding-3-small"),
+                model=os.getenv("EMBEDDING_MODEL"),
                 input=text
             )
             return response.data[0].embedding
