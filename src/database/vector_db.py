@@ -110,6 +110,9 @@ class VectorDatabase:
         Returns:
             Dict: Resultados da consulta após reranking.
         """
+        
+        logger.info(f"Realizando consulta vetorial. Embedding shape: {len(query_embedding)}")
+        logger.info(f"Limite de resultados: {limit}")
         if not query_text and not query_embedding:
             raise ValueError("É necessário fornecer query_text ou query_embedding")
             

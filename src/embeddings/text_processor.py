@@ -8,13 +8,13 @@ from src.utils.cache_manager import CacheManager, cached_embedding
 
 logger = logging.getLogger(__name__)
 
-
-
 class TextProcessor:
     """Classe para processar consultas textuais e convertê-las em embeddings."""
 
     def __init__(self, api_key: Optional[str] = None):
         print("Inicializando TextProcessor")  # Log de debug
+        print(f"Método enhance_query existe: {hasattr(self, 'enhance_query')}")
+        print(f"Método enhance_query é callable: {callable(getattr(self, 'enhance_query', None))}")
 
         """
         Inicializa o processador de texto.
@@ -44,7 +44,6 @@ class TextProcessor:
             str: Consulta aprimorada.
         """
         try:
-            # Verificar cache primeiro
             cached_query = self.cache_manager.get_cached_query_results(
                 f"enhance_v2_{query_text}", 1
             )
@@ -54,11 +53,6 @@ class TextProcessor:
 
             logger.info(f"Aprimorando consulta avançada: '{query_text}'")
 
-            # Abordagem dois estágios:
-            # 1. Extrair atributos estruturados da consulta
-            # 2. Expandir a consulta com base nos atributos
-
-            # Estágio 1: Extrair atributos
             extraction_response = self.client.chat.completions.create(
                 model="gpt-4o",
                 messages=[
@@ -121,10 +115,10 @@ class TextProcessor:
                         "role": "user",
                         "content": f"""Consulta original: '{query_text}'
                             
-    Atributos extraídos:
-    {json.dumps(attributes, indent=2, ensure_ascii=False)}
+            Atributos extraídos:
+            {json.dumps(attributes, indent=2, ensure_ascii=False)}
 
-    Crie uma descrição expandida para maximizar a similaridade vetorial:""",
+            Crie uma descrição expandida para maximizar a similaridade vetorial:""",
                     },
                 ],
                 temperature=0.3,
@@ -137,19 +131,19 @@ class TextProcessor:
             # Adicionamos termos de alta relevância e marcações semânticas
             structured_query = f"""Consulta Detalhada de Moda: {enhanced_query}
                 
-    Principais Atributos:
-    - Tipo de Peça: {attributes.get('tipo_peca', 'N/A')}
-    - Cores: {', '.join(attributes.get('cores', [])) if isinstance(attributes.get('cores'), list) else attributes.get('cores', 'N/A')}
-    - Padrão/Estampa: {attributes.get('padrao', 'N/A')}
-    - Material: {attributes.get('material', 'N/A')}
-    - Estilo: {attributes.get('estilo', 'N/A')}
-    - Ocasião: {attributes.get('ocasiao', 'N/A')}
-    - Gênero: {attributes.get('genero', 'N/A')}
-    - Estação: {attributes.get('estacao', 'N/A')}
+            Principais Atributos:
+            - Tipo de Peça: {attributes.get('tipo_peca', 'N/A')}
+            - Cores: {', '.join(attributes.get('cores', [])) if isinstance(attributes.get('cores'), list) else attributes.get('cores', 'N/A')}
+            - Padrão/Estampa: {attributes.get('padrao', 'N/A')}
+            - Material: {attributes.get('material', 'N/A')}
+            - Estilo: {attributes.get('estilo', 'N/A')}
+            - Ocasião: {attributes.get('ocasiao', 'N/A')}
+            - Gênero: {attributes.get('genero', 'N/A')}
+            - Estação: {attributes.get('estacao', 'N/A')}
 
-    {enhanced_query}
+            {enhanced_query}
 
-    Termos Relevantes: {query_text}, {attributes.get('tipo_peca', '')}, {attributes.get('estilo', '')}, {attributes.get('ocasiao', '')}"""
+            Termos Relevantes: {query_text}, {attributes.get('tipo_peca', '')}, {attributes.get('estilo', '')}, {attributes.get('ocasiao', '')}"""
 
             logger.debug(f"Consulta aprimorada avançada: '{structured_query[:100]}...'")
 
@@ -183,8 +177,10 @@ class TextProcessor:
                 )
 
                 return response.choices[0].message.content
-            except:
-                return query_text
+            except Exception as e:
+                # Fallback simples
+                logger.warning(f"Erro no enhance_query: {e}. Usando consulta original.")
+                return query_text.strip('"')
 
 
     def _preprocess_text(self, text: str) -> str:

@@ -11,7 +11,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def extract_descriptions(cache_dir="../data/cache", output_file="../data/input/test_descriptions.csv"):
+def extract_descriptions(cache_dir="../../src/data/cache/descriptions", output_file="../data/input/test_descriptions.csv", limit=20):
     """
     Extrai descrições de imagens dos arquivos JSON de cache e cria uma base de testes.
     """
@@ -24,6 +24,12 @@ def extract_descriptions(cache_dir="../data/cache", output_file="../data/input/t
         logger.error(f"Nenhum arquivo JSON encontrado em {cache_dir}")
         return None
     
+    # Limita a quantidade de arquivos, selecionando aleatoriamente se necessário
+    if limit > 0 and len(json_files) > limit:
+        import random
+        json_files = random.sample(json_files, limit)
+        logger.info(f"Limitando para {limit} arquivos aleatórios")
+    
     all_data = []
     
     for json_file in json_files:
@@ -32,20 +38,42 @@ def extract_descriptions(cache_dir="../data/cache", output_file="../data/input/t
                 data = json.load(f)
             
             file_name = data.get("id", os.path.basename(json_file))
+            # Adicionar caminho da imagem original
+            image_path = data.get("image_path", "")
             
-            description = data.get("description", {})
+            # Correção para o parsing do JSON
+            description_raw = data.get("description", "")
             description_text = data.get("description_text", "")
             
-            tipo_peca = description.get("Tipo de peça", description.get("tipo de peça", ""))
-            ocasiao = description.get("Ocasião de uso", description.get("ocasião de uso", ""))
-            cores = description.get("Cores predominantes", description.get("cores predominantes", ""))
-            padrao = description.get("Padrão", description.get("padrão", ""))
-            estilo = description.get("Estilo/estética", description.get("estilo/estética", ""))
-            genero = description.get("Gênero", description.get("gênero", ""))
-            estacao = description.get("Estação do ano mais adequada", description.get("estação do ano mais adequada", ""))
+            # Tenta extrair o JSON da string se ela começar com ```json
+            description = {}
+            if isinstance(description_raw, str) and "```json" in description_raw:
+                try:
+                    # Extrai o conteúdo JSON da string markdown
+                    json_text = description_raw.split("```json", 1)[1].split("```", 1)[0].strip()
+                    description = json.loads(json_text)
+                except (json.JSONDecodeError, IndexError) as e:
+                    logger.warning(f"Erro ao extrair JSON da descrição em {json_file}: {str(e)}")
+            elif isinstance(description_raw, dict):
+                description = description_raw
+            
+            # Agora use description para extrair os valores
+            tipo_peca = description.get("tipo_de_peca", description.get("Tipo de peça", ""))
+            ocasiao = description.get("ocasiao_de_uso", description.get("Ocasião de uso", ""))
+            cores = description.get("cores_predominantes", description.get("Cores predominantes", ""))
+            padrao = description.get("padrao", description.get("Padrão", ""))
+            estilo = description.get("estilo_estetica", description.get("Estilo/estética", ""))
+            genero = description.get("genero", description.get("Gênero", ""))
+            estacao = description.get("estacao_do_ano_mais_adequada", description.get("Estação do ano mais adequada", ""))
+            
+            # Extrai a descrição completa do JSON interno, se existir
+            descricao_completa = description.get("descricao_completa", "")
+            if not descricao_completa and description_text:
+                descricao_completa = description_text
             
             all_data.append({
                 "arquivo": file_name,
+                "imagem_original": image_path,
                 "tipo_peca": tipo_peca,
                 "ocasiao": ocasiao,
                 "cores": cores,
@@ -53,7 +81,7 @@ def extract_descriptions(cache_dir="../data/cache", output_file="../data/input/t
                 "estilo": estilo,
                 "genero": genero,
                 "estacao": estacao,
-                "descricao_completa": description_text
+                "descricao_completa": descricao_completa
             })
             
         except Exception as e:
@@ -141,9 +169,13 @@ def generate_test_queries(df, num_queries=30, output_file="../data/input/test_qu
     
     for i in range(min(5, len(df))):
         row = df.iloc[i]
-        if pd.notna(row['tipo_peca']) and pd.notna(row['cores']):
-            cor = row['cores'].split(',')[0].strip()
-            queries.append(f"{row['tipo_peca']} {cor} {row.get('estilo', '')}")
+        if pd.notna(row['tipo_peca']):
+            if isinstance(row['cores'], list) and len(row['cores']) > 0:
+                cor = row['cores'][0]
+                queries.append(f"{row['tipo_peca']} {cor} {row.get('estilo', '')}")
+            elif pd.notna(row['cores']) and isinstance(row['cores'], str):
+                cor = row['cores'].split(',')[0].strip()
+                queries.append(f"{row['tipo_peca']} {cor} {row.get('estilo', '')}")
     
     queries = queries[:num_queries]
     
@@ -155,7 +187,7 @@ def generate_test_queries(df, num_queries=30, output_file="../data/input/test_qu
     return queries
 
 if __name__ == "__main__":
-    df = extract_descriptions()
+    df = extract_descriptions(limit=20)
     
     if df is not None:
         generate_test_queries(df, output_file="../data/input/test_queries.txt")

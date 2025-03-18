@@ -237,13 +237,17 @@ class ImageIndexer:
             Dict: Resultados da busca.
         """
         try:
-            if not hasattr(self.text_processor, 'enhance_query'):
-            # Fallback básico
-                logger.warning("Método enhance_query não encontrado. Usando consulta original.")
-                enhanced_query = query_text
-            else:
+            logger.info(f"Iniciando busca para consulta: '{query_text}'")
+            logger.info(f"Modo de alta qualidade: {high_quality}")
+            logger.info(f"Limite de resultados: {limit}")
+            # Tenta usar o método enhance_query do TextProcessor
+            if callable(getattr(self.text_processor, 'enhance_query', None)):
                 enhanced_query = self.text_processor.enhance_query(query_text)
-            # Chave de cache diferente para buscas de alta qualidade
+            else:
+            # Usa o método de enhance_query do próprio indexer
+                enhanced_query = self.enhance_query(query_text)
+            
+            # Resto do código permanece igual
             cache_key = f"high_quality_{query_text}" if high_quality else query_text
 
             # Verificar cache primeiro

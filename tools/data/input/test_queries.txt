@@ -1,25 +1,25 @@
-1. "Conjunto com cropped e shorts verde para um look boho"
-2. "Vestido curto rosa para festa de verão"
-3. "Body amarelo descontraído para usar no verão"
-4. "Robe curto preto e moderno para outono"
-5. "Conjunto de top e saia marrom e rosa para uma festa casual"
-6. "Vestido curto branco para usar na primavera"
-7. "Conjunto com cropped e shorts azul claro e lilás para um look praiano"
-8. "Body branco com listras pretas para uma festa de outono"
-9. "Robe curto vermelho e preto para uma ocasião casual"
-10. "Conjunto de top e saia leve e descontraído para o verão"
-11. "Vestido curto verde para uma festa moderna"
-12. "Body preto para um look casual no inverno"
-13. "Conjunto com cropped e shorts despojado para a primavera"
-14. "Robe curto amarelo para uma festa de verão"
-15. "Vestido curto branco para um look casual de primavera"
-16. "Conjunto de top e saia boho para uma festa de verão"
-17. "Body azul claro e lilás para usar na praia"
-18. "Robe curto rosa para uma ocasião casual no outono"
-19. "Conjunto com cropped e shorts preto para um look descontraído de inverno"
-20. "Vestido curto marrom e rosa para uma festa de primavera"
-21. "Body vermelho e preto para uma noite de festa no inverno"
-22. "Conjunto de top e saia branco com listras pretas para um evento casual"
-23. "Robe curto verde para um look leve de outono"
-24. "Vestido curto despojado para usar na praia"
-25. "Conjunto com cropped e shorts amarelo para um look de verão"
+1. Macaquinho azul escuro estilo sexy para festa de verão
+2. Vestido preto e branco elegante para ocasiões formais na primavera
+3. Conjunto de top e shorts marrom e preto descontraído para uso casual no verão
+4. Macacão curto branco, preto e verde menta boêmio para festas de primavera
+5. Vestido azul claro estilo princesa para eventos formais de verão
+6. Macaquinho preto elegante para uma noite no clube durante o verão
+7. Vestido azul escuro vintage para ocasiões casuais na primavera
+8. Conjunto de top e shorts preto e branco estilo praiano para o verão
+9. Macacão curto marrom e preto estilo avental com amarração nas costas para uso casual
+10. Vestido verde menta boêmio para festas de primavera
+11. Macaquinho azul claro sexy para eventos casuais de primavera/verão
+12. Conjunto de top e shorts azul escuro elegante para ocasiões formais de verão
+13. Vestido preto e branco descontraído para festas de primavera/verão
+14. Macacão curto branco estilo princesa para eventos casuais de verão
+15. Macaquinho preto boêmio para uma noite no clube durante a primavera
+16. Vestido marrom e preto vintage para ocasiões casuais de verão
+17. Conjunto de top e shorts azul claro estilo praiano para o verão
+18. Macacão curto azul escuro estilo sexy para festas de primavera
+19. Vestido verde menta elegante para eventos formais de verão
+20. Macaquinho preto e branco descontraído para uso casual no verão
+21. Conjunto de top e shorts marrom e preto boêmio para festas de primavera/verão
+22. Vestido azul claro estilo avental com amarração nas costas para ocasiões casuais de primavera
+23. Macacão curto azul escuro vintage para eventos formais na primavera
+24. Macaquinho preto sexy para uma noite no clube durante o verão
+25. Vestido marrom e preto estilo princesa para festas de primavera/verão

@@ -9,8 +9,14 @@ import matplotlib.pyplot as plt
 from tabulate import tabulate
 from typing import List, Dict, Any, Tuple
 import json
+import re
+import glob
+import shutil
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..','src')))
+# Configurar logging detalhado
+# Já configurado acima
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..')))
 os.environ["CHROMA_PERSIST_DIRECTORY"] = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../chroma_db'))
 
 from src.processing.indexer import ImageIndexer
@@ -77,6 +83,11 @@ def run_embedding_tests(queries: List[str], top_k: int = 3, output_dir: str = ".
         
         raw_results = search_results["results"]
         
+        # Log detalhado para verificar a estrutura
+        logger.info(f"Estrutura dos resultados: {list(raw_results.keys())}")
+        if "metadatas" in raw_results and raw_results["metadatas"] and len(raw_results["metadatas"]) > 0:
+            logger.info(f"Exemplo de metadata: {raw_results['metadatas'][0][0] if raw_results['metadatas'][0] else 'Vazio'}")
+        
         for i in range(len(raw_results["ids"][0])):
             image_id = raw_results["ids"][0][i]
             distance = raw_results["distances"][0][i]
@@ -85,13 +96,54 @@ def run_embedding_tests(queries: List[str], top_k: int = 3, output_dir: str = ".
             metadata = raw_results["metadatas"][0][i] if raw_results["metadatas"] else {}
             document = raw_results["documents"][0][i] if raw_results["documents"] else ""
             
-            tipo_peca = metadata.get("Tipo de peça", metadata.get("tipo de peça", "N/A"))
-            cores = metadata.get("Cores predominantes", metadata.get("cores predominantes", "N/A"))
+            # Extrair informações usando regex - abordagem mais robusta
+            tipo_peca = "N/A"
+            cores = "N/A"
+            image_path = "N/A"
+            
+            # Obter caminho da imagem diretamente dos metadados
+            if metadata and "path" in metadata:
+                image_path = metadata["path"]
+                # Extrair filename do path
+                filename = os.path.basename(image_path)
+            else:
+                # Tentar extrair do documento como fallback
+                image_path_match = re.search(r'"image_path"\s*:\s*"([^"]+)"', document)
+                if image_path_match:
+                    image_path = image_path_match.group(1)
+                    filename = os.path.basename(image_path)
+                else:
+                    filename = f"imagem_{image_id}.jpg"
+            
+            # Extrair tipo_peca do documento
+            tipo_peca_match = re.search(r'"tipo_de_peca"\s*:\s*"([^"]+)"', document) or re.search(r'"Tipo de peça"\s*:\s*"([^"]+)"', document)
+            if tipo_peca_match:
+                tipo_peca = tipo_peca_match.group(1)
+            
+            # Extrair cores do documento - pode ser lista ou string
+            cores_match = re.search(r'"cores_predominantes"\s*:\s*(\[[^\]]+\])', document) or re.search(r'"Cores predominantes"\s*:\s*(\[[^\]]+\])', document)
+            if cores_match:
+                try:
+                    cores_array = json.loads(cores_match.group(1))
+                    if isinstance(cores_array, list):
+                        cores = ", ".join(cores_array)
+                except:
+                    # Se falhar em transformar em lista, tentar extrair diretamente
+                    cores_text = cores_match.group(1).strip('[]').replace('"', '')
+                    cores = cores_text
+            
+            # Se ainda não tiver cores, procurar por versão string
+            if cores == "N/A":
+                cores_str_match = re.search(r'"cores_predominantes"\s*:\s*"([^"]+)"', document) or re.search(r'"Cores predominantes"\s*:\s*"([^"]+)"', document)
+                if cores_str_match:
+                    cores = cores_str_match.group(1)
             
             results_data.append({
                 "query": query,
                 "rank": i + 1,
                 "image_id": image_id,
+                "image_path": image_path,
+                "filename": filename,
                 "similarity": similarity,
                 "tipo_peca": tipo_peca,
                 "cores": cores,
@@ -121,12 +173,52 @@ def generate_test_report(results_df: pd.DataFrame, output_dir: str):
     
     report_html = os.path.join(output_dir, "embedding_test_report.html")
     
+    # Criar diretório para imagens referenciadas no relatório
+    images_report_dir = os.path.join(output_dir, "images")
+    os.makedirs(images_report_dir, exist_ok=True)
+    
     query_results = []
     for query in results_df['query'].unique():
         query_df = results_df[results_df['query'] == query].sort_values('rank')
         
-        query_table = query_df[['rank', 'image_id', 'similarity', 'tipo_peca', 'cores']].to_html(
-            index=False, 
+        # Preparar a coluna de imagem para HTML
+        html_images = []
+        for idx, row in query_df.iterrows():
+            original_path = row['image_path']
+            filename = row['filename']
+            
+            logger.info(f"Processando imagem para HTML: path={original_path}, filename={filename}")
+            
+            # Verificar se o caminho existe 
+            if os.path.exists(original_path):
+                # Criar referência relativa para o HTML
+                relative_path = f"images/{filename}"
+                dest_path = os.path.join(images_report_dir, filename)
+                
+                # Copiar a imagem para o diretório do relatório
+                try:
+                    shutil.copy2(original_path, dest_path)
+                    img_html = f'<img src="{relative_path}" alt="{row["tipo_peca"]}" width="150">'
+                    logger.info(f"Imagem copiada com sucesso: {dest_path}")
+                except Exception as e:
+                    logger.error(f"Erro ao copiar imagem {original_path}: {str(e)}")
+                    img_html = f'<img src="N/A" alt="Erro: {str(e)[:30]}..." width="150">'
+            else:
+                logger.warning(f"Caminho de imagem não existe: {original_path}")
+                img_html = f'<img src="N/A" alt="Caminho não existe" width="150">'
+            
+            html_images.append(img_html)
+            
+            html_images.append(img_html)
+        
+        # Adicionar a coluna de HTML de imagens ao DataFrame
+        temp_df = query_df.copy()
+        temp_df['imagem'] = html_images
+        
+        # Gerar HTML da tabela
+        query_table = temp_df[['rank', 'imagem', 'similarity', 'tipo_peca', 'cores']].to_html(
+            index=False,
+            escape=False,  # Importante: não escapar o HTML das imagens
             float_format=lambda x: f"{x:.4f}" if isinstance(x, float) else x
         )
         
@@ -164,7 +256,7 @@ def generate_test_report(results_df: pd.DataFrame, output_dir: str):
         <style>
             body {{ font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }}
             table {{ border-collapse: collapse; width: 100%; margin-bottom: 20px; }}
-            th, td {{ padding: 8px; text-align: left; border: 1px solid #ddd; }}
+            th, td {{ padding: 8px; text-align: left; border: 1px solid #ddd; vertical-align: middle; }}
             th {{ background-color: #f2f2f2; }}
             tr:nth-child(even) {{ background-color: #f9f9f9; }}
             h1, h2, h3 {{ color: #333; }}
@@ -172,7 +264,8 @@ def generate_test_report(results_df: pd.DataFrame, output_dir: str):
             .metric-card {{ background-color: #f9f9f9; padding: 15px; border-radius: 5px; flex: 1; min-width: 200px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }}
             .metric-value {{ font-size: 24px; font-weight: bold; margin: 10px 0; }}
             .query-section {{ margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; border-radius: 5px; }}
-            img {{ max-width: 100%; height: auto; margin: 20px 0; }}
+            .chart-img {{ max-width: 100%; height: auto; margin: 20px 0; }}
+            td img {{ max-width: 150px; height: auto; display: block; margin: 0 auto; border: 1px solid #eee; }}
         </style>
     </head>
     <body>
@@ -191,10 +284,10 @@ def generate_test_report(results_df: pd.DataFrame, output_dir: str):
         </div>
         
         <h2>Distribuição de Similaridade</h2>
-        <img src="similarity_distribution.png" alt="Distribuição de Similaridade">
+        <img src="similarity_distribution.png" alt="Distribuição de Similaridade" class="chart-img">
         
         <h2>Similaridade por Posição no Ranking</h2>
-        <img src="rank_similarity.png" alt="Similaridade por Rank">
+        <img src="rank_similarity.png" alt="Similaridade por Rank" class="chart-img">
         
         <h2>Similaridade por Rank</h2>
         {rank_similarity.to_html(index=False, float_format=lambda x: f"{x:.4f}" if isinstance(x, float) else x)}
