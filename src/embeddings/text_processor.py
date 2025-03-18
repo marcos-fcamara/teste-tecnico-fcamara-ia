@@ -262,7 +262,7 @@ class TextProcessor:
 
 
     @cached_embedding(CacheManager())
-    def generate_embedding(self, text: str, use_ensemble: bool = True) -> List[float]:
+    def generate_embedding(self, text: str, use_ensemble: bool = True, force_local: bool = False) -> List[float]:
         try:
             # Verificar cache primeiro
             embedding_key = f"{text}_ensemble" if use_ensemble else text
@@ -270,7 +270,12 @@ class TextProcessor:
             if cached_embedding:
                 logger.info(f"Usando embedding em cache")
                 return cached_embedding
-
+                
+            # Se forçar uso local e não tiver no cache, retorne None ou um embedding vazio
+            if force_local:
+                logger.info(f"Modo force_local ativado, mas embedding não encontrado no cache")
+                return None
+                
             logger.info(f"Gerando embedding avançado para texto")
 
             if use_ensemble:
@@ -382,4 +387,6 @@ class TextProcessor:
 
         except Exception as e:
             logger.error(f"Erro ao gerar embedding: {str(e)}")
+            if force_local:
+                return None
             raise

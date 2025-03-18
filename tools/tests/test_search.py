@@ -7,16 +7,16 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..')))
-output_dir = "results/search"
+output_dir = "../results/search"
 
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 os.environ["CHROMA_PERSIST_DIRECTORY"] = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../chroma_db'))
 
-from processing.indexer import ImageIndexer
-from processing.image_processor import ImageProcessor
-from database.vector_db import VectorDatabase
+from src.processing.indexer import ImageIndexer
+from src.processing.image_processor import ImageProcessor
+from src.database.vector_db import VectorDatabase
 
 load_dotenv()
 
@@ -40,29 +40,6 @@ TEST_QUERIES = [
     "macaquinho leve para dia quente",
     "roupa com estampa animal para mulher"
     "vestido vermelho elegante para ocasião formal",
-    "calça jeans moderna para jovens",
-    "roupa esportiva para academia",
-    "traje de inverno com cores escuras",
-    "look de verão com estampa floral",
-    "roupa social para trabalho em escritório",
-    "peça básica em cor neutra",
-    "item de moda com padrão listrado",
-    "acessório fashion para complementar visual",
-    "camiseta branca básica de algodão",
-    "vestido preto curto para festa noturna",
-    "casaco azul marinho para inverno",
-    "calça cargo verde militar",
-    "blusa feminina estampada colorida",
-    "jaqueta de couro preta estilo motoqueiro",
-    "saia midi plissada elegante",
-    "shorts jeans desfiado casual",
-    "camisa social slim fit azul clara",
-    "moletom oversized cinza com capuz",
-    "roupa para ambiente corporativo formal",
-    "look despojado para fim de semana",
-    "traje para evento ao ar livre no verão",
-    "outfit streetwear urbano",
-    "vestimenta minimalista elegante",
 ]
 
 def format_results_for_table(results, query):
@@ -75,21 +52,65 @@ def format_results_for_table(results, query):
     raw_results = results["results"]
     
     for i in range(len(raw_results["ids"][0])):
+        # Obtemos o ID para referência
         image_id = raw_results["ids"][0][i]
+        
+        # Obtemos os metadados
+        metadata = raw_results["metadatas"][0][i] if raw_results["metadatas"] else {}
+        
+        # Extraímos o caminho da imagem dos metadados
+        image_path = metadata.get("path", image_id)
+        
+        # Para melhor visualização, mostramos o nome do arquivo
+        image_filename = os.path.basename(image_path) if image_path else image_id
+        
         distance = raw_results["distances"][0][i]
         similarity = 1 - distance
         
-        metadata = raw_results["metadatas"][0][i] if raw_results["metadatas"] else {}
         document = raw_results["documents"][0][i] if raw_results["documents"] else ""
         
-        tipo_peca = metadata.get("tipo de peça", "N/A")
-        cores = metadata.get("cores predominantes", "N/A")
+        # Extrair tipo de peça e cores da descrição em JSON
+        tipo_peca = "N/A"
+        cores = "N/A"
+        
+        try:
+            # Verificar se o documento contém JSON
+            import json
+            import re
+            
+            # Tentar extrair o JSON da descrição
+            json_match = re.search(r'\{.*\}', document, re.DOTALL)
+            if json_match:
+                try:
+                    json_data = json.loads(json_match.group(0))
+                    
+                    # Extrair tipo de peça (verificando várias possíveis chaves)
+                    tipo_peca_keys = ["tipo_de_peca", "tipo_peca", "tipo"]
+                    for key in tipo_peca_keys:
+                        if key in json_data and json_data[key]:
+                            tipo_peca = json_data[key]
+                            break
+                    
+                    # Extrair cores (verificando várias possíveis chaves)
+                    cores_keys = ["cores_predominantes", "cores", "cor"]
+                    for key in cores_keys:
+                        if key in json_data and json_data[key]:
+                            if isinstance(json_data[key], list):
+                                cores = ", ".join(json_data[key])
+                            else:
+                                cores = json_data[key]
+                            break
+                except:
+                    # Se falhar ao processar o JSON, mantenha os valores padrão
+                    pass
+        except Exception as e:
+            logger.debug(f"Erro ao processar metadados da imagem: {str(e)}")
         
         descricao = document[:100] + "..." if len(document) > 100 else document
         
         table_data.append([
             query,
-            image_id,
+            image_filename,
             f"{similarity:.4f}",
             tipo_peca,
             cores,

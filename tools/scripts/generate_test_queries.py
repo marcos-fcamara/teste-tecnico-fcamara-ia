@@ -53,7 +53,7 @@ class QueryGenerator:
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4-turbo",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": "Você é um assistente especializado em moda e e-commerce."},
                     {"role": "user", "content": prompt}
@@ -86,6 +86,70 @@ class QueryGenerator:
             
         except Exception as e:
             logger.error(f"Erro ao gerar consultas com a API: {str(e)}")
+            return []
+    
+    def generate_specialized_queries_from_descriptions(self, descriptions_df, num_queries=5, category_type="ocasião"):
+        """Gera consultas especializadas para uma categoria específica usando apenas as descrições."""
+        # Usamos as descrições completas
+        descriptions = descriptions_df['description'].dropna().tolist()
+
+        if not descriptions:
+            return []
+
+        # Selecionamos algumas descrições para exemplo
+        sample_descriptions = random.sample(descriptions, min(5, len(descriptions)))
+
+        prompt = f"""
+        Você é um especialista em moda e sistemas de busca de roupas.
+
+        Preciso que você gere {num_queries} consultas de busca realistas específicas para a categoria: {category_type}.
+
+        Aqui estão alguns exemplos de descrições de produtos em nossa base:
+        {sample_descriptions}
+
+        Crie consultas detalhadas e específicas que um usuário usaria para encontrar roupas com características de {category_type}.
+        As consultas devem ser variadas e focadas em {category_type}.
+
+        Formate a resposta como um array JSON com objetos contendo:
+        - "query": a consulta do usuário
+        - "categoria": a categoria {category_type}
+        - "intenção": o que o usuário está buscando
+        """
+
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "Você é um assistente especializado em moda e e-commerce."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.7,
+                response_format={"type": "json_object"}
+            )
+            
+            content = response.choices[0].message.content
+            try:
+                queries_data = json.loads(content)
+            except json.JSONDecodeError:
+                logger.error(f"Erro ao decodificar JSON: {content[:100]}...")
+                return []
+            
+            if isinstance(queries_data, dict) and "queries" in queries_data:
+                return queries_data["queries"]
+            elif isinstance(queries_data, list):
+                return queries_data
+            else:
+                logger.warning("Formato inesperado na resposta. Tentando extrair consultas...")
+                queries = []
+                for key, value in queries_data.items():
+                    if isinstance(value, dict) and "query" in value:
+                        queries.append(value)
+                    elif isinstance(value, str):
+                        queries.append({"query": value, "categoria": category_type, "intenção": "desconhecida"})
+                
+                return queries
+        except Exception as e:
+            logger.error(f"Erro ao gerar consultas especializadas: {str(e)}")
             return []
     
     def generate_specialized_queries(self, descriptions_df, num_queries=5, category_type="ocasião"):
@@ -132,7 +196,7 @@ class QueryGenerator:
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4-turbo",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": "Você é um assistente especializado em moda e e-commerce."},
                     {"role": "user", "content": prompt}
@@ -162,11 +226,11 @@ class QueryGenerator:
         except Exception as e:
             logger.error(f"Erro ao gerar consultas especializadas: {str(e)}")
             return []
-
+    
 def main():
-    descriptions_file = "../data/input/test_descriptions.csv"
+    descriptions_file = "/home/azureuser/fashion-similarity-search/teste-tecnico-fcamara/src/data/input/test_descriptions.csv"
     output_file = "../data/input/ai_generated_queries.json"
-    text_output_file = "../data/input/test_queries.txt"
+    text_output_file = "/home/azureuser/fashion-similarity-search/teste-tecnico-fcamara/src/data/input/test_queries.txt"
     
     if not os.path.exists(descriptions_file):
         logger.error(f"Arquivo de descrições não encontrado: {descriptions_file}")
@@ -175,6 +239,7 @@ def main():
     try:
         df = pd.read_csv(descriptions_file)
         logger.info(f"Carregadas {len(df)} descrições de {descriptions_file}")
+        logger.info(f"Colunas disponíveis no DataFrame: {', '.join(df.columns)}")
     except Exception as e:
         logger.error(f"Erro ao carregar descrições: {str(e)}")
         return
@@ -191,18 +256,19 @@ def main():
     general_queries = generator.generate_queries(df, num_queries=15)
     all_queries.extend(general_queries)
     
+    # Vamos simplificar e usar apenas categorias genéricas, já que não temos as colunas específicas
     categories = [
-        ("tipo", "tipo_peca", 3),
-        ("estilo", "estilo", 3),
-        ("ocasião", "ocasiao", 3),
-        ("estação", "estacao", 3),
-        ("cor", "cores", 3)
+        "estilo",
+        "ocasião",
+        "estação",
+        "cor"
     ]
     
-    for name, col, count in tqdm(categories, desc="Gerando consultas por categoria"):
-        logger.info(f"Gerando consultas por {name}...")
-        specialized_queries = generator.generate_specialized_queries(
-            df, num_queries=count, category_type=name
+    for category in tqdm(categories, desc="Gerando consultas por categoria"):
+        logger.info(f"Gerando consultas por {category}...")
+        # Modificamos a chamada para ignorar o nome da coluna real
+        specialized_queries = generator.generate_specialized_queries_from_descriptions(
+            df, num_queries=3, category_type=category
         )
         all_queries.extend(specialized_queries)
     

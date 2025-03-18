@@ -1,0 +1,226 @@
+query,rank,image_id,image_path,filename,similarity,tipo_peca,cores,description
+"Vestido boho estampado: Vestido curto, solto, estampado em azul e verde, mangas três quartos, decote V, estilo praiano.",1,img_484,src/data/images/2015-new-style-casual-fashion-summer-dress-loose-printed-three-quarter-V-neck-sexy-mini-beach.jpg_220x220_normalized.jpg,2015-new-style-casual-fashion-summer-dress-loose-printed-three-quarter-V-neck-sexy-mini-beach.jpg_220x220_normalized.jpg,0.7346352168717197,vestido,"azul claro, verde, preto","```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""azul ..."
+"Vestido boho estampado: Vestido curto, solto, estampado em azul e verde, mangas três quartos, decote V, estilo praiano.",2,img_325,src/data/images/2015-new-style-casual-fashion-summer-dress-loose-printed-three-quarter-V-neck-sexy-mini-beach.jpg_220x220.jpg,2015-new-style-casual-fashion-summer-dress-loose-printed-three-quarter-V-neck-sexy-mini-beach.jpg_220x220.jpg,0.7263592122137486,vestido,"azul claro, verde água","```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": [""azul..."
+"Vestido boho estampado: Vestido curto, solto, estampado em azul e verde, mangas três quartos, decote V, estilo praiano.",3,img_127,src/data/images/new-style-2015-sheath-summer-dress-three-quarter-printed-V-neck-chiffon-cotton-lace-beach-Mini.jpg_220x220_normalized.jpg,new-style-2015-sheath-summer-dress-three-quarter-printed-V-neck-chiffon-cotton-lace-beach-Mini.jpg_220x220_normalized.jpg,0.717580073857034,vestido,"branco, azul, laranja, verde","```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""branc..."
+"Vestido preto de renda: Vestido elegante, preto, solto, mangas transparentes de renda com bolinhas, gola dobrável.Conjunto boho casual: Top curto vazado e shorts de cintura alta, branco ou floral, com renda e franjas.Vestido branco sexy: Conjunto de top de renda floral e saia longa com fenda, elegante e fresco.",1,img_7,src/data/images/2015-mulheres-verão-vestido-de-duas-peças-casuais-vestido-Sexy-V-Neck-manga-comprida-vestido-de.jpg_350x350_normalized.jpg,2015-mulheres-verão-vestido-de-duas-peças-casuais-vestido-Sexy-V-Neck-manga-comprida-vestido-de.jpg_350x350_normalized.jpg,0.7184094032209438,Conjunto de duas peças,Branco e preto,"```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predomi..."
+"Vestido preto de renda: Vestido elegante, preto, solto, mangas transparentes de renda com bolinhas, gola dobrável.Conjunto boho casual: Top curto vazado e shorts de cintura alta, branco ou floral, com renda e franjas.Vestido branco sexy: Conjunto de top de renda floral e saia longa com fenda, elegante e fresco.",2,img_49,src/data/images/2015-mulheres-verão-vestido-de-duas-peças-casuais-vestido-Sexy-V-Neck-manga-comprida-vestido-de.jpg_350x350.jpg,2015-mulheres-verão-vestido-de-duas-peças-casuais-vestido-Sexy-V-Neck-manga-comprida-vestido-de.jpg_350x350.jpg,0.7142578351002966,Conjunto de duas peças,"Branco, Preto","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predomi..."
+"Vestido preto de renda: Vestido elegante, preto, solto, mangas transparentes de renda com bolinhas, gola dobrável.Conjunto boho casual: Top curto vazado e shorts de cintura alta, branco ou floral, com renda e franjas.Vestido branco sexy: Conjunto de top de renda floral e saia longa com fenda, elegante e fresco.",3,img_26,src/data/images/-2015-Women-two-pieces-set-summer-jumpsuit-solid-Lace-stitching-tassel-backless-hollow-out-rompers.jpg_220x220_normalized.jpg,-2015-Women-two-pieces-set-summer-jumpsuit-solid-Lace-stitching-tassel-backless-hollow-out-rompers.jpg_220x220_normalized.jpg,0.7053887816308617,Conjunto de duas peças (top e shorts),"Branco, azul, laranja, bege","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças (top e shorts)"",
+  ""ocasiao_de_uso"": ""Casual"",
+ ..."
+roupa feminina de verão com estampa geométrica azul e branca,1,img_182,src/data/images/2015-new-arrival-summer-dress-A-line-printed-sleeveless-V-neck-chiffon-lace-cotton-mini-beach.jpg_220x220_normalized.jpg,2015-new-arrival-summer-dress-A-line-printed-sleeveless-V-neck-chiffon-lace-cotton-mini-beach.jpg_220x220_normalized.jpg,0.7000784757069716,vestido,"preto, branco, rosa","```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": [""pret..."
+roupa feminina de verão com estampa geométrica azul e branca,2,img_350,src/data/images/2015-new-style-Women-Dresses-element-pattern-short-Sleeve-Mini-Club-Party-Dress-.jpg_220x220_normalized.jpg,2015-new-style-Women-Dresses-element-pattern-short-Sleeve-Mini-Club-Party-Dress-.jpg_220x220_normalized.jpg,0.6960358125323073,Conjunto de blusa e saia,Branco e azul,"```json
+{
+  ""tipo_de_peca"": ""Conjunto de blusa e saia"",
+  ""ocasiao_de_uso"": ""Casual, festa"",
+  ""core..."
+roupa feminina de verão com estampa geométrica azul e branca,3,img_126,src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,0.6896430140940777,Conjunto de duas peças (top e shorts),"Vermelho, Azul","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças (top e shorts)"",
+  ""ocasiao_de_uso"": ""Casual"",
+ ..."
+conjunto cropped e shorts estilo boêmio,1,img_319,src/data/images/2015-Summer-style-2-piece-set-women-shorts-and-top-fashion-White-cropped-floral-print-pants.jpg_220x220.jpg,2015-Summer-style-2-piece-set-women-shorts-and-top-fashion-White-cropped-floral-print-pants.jpg_220x220.jpg,0.7179128065957835,Conjunto de top cropped e shorts,"Branco, vermelho, rosa e azul","```json
+{
+  ""tipo_de_peca"": ""Conjunto de top cropped e shorts"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cor..."
+conjunto cropped e shorts estilo boêmio,2,img_126,src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,0.7069186781075275,Conjunto de duas peças (top e shorts),"Vermelho, Azul","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças (top e shorts)"",
+  ""ocasiao_de_uso"": ""Casual"",
+ ..."
+conjunto cropped e shorts estilo boêmio,3,img_416,src/data/images/2015-new-fashion-women-sexy-dresses-with-tassel-sleeveless-backless-twinset-dress-loose-irregular-sundress-above.jpg_220x220_normalized.jpg,2015-new-fashion-women-sexy-dresses-with-tassel-sleeveless-backless-twinset-dress-loose-irregular-sundress-above.jpg_220x220_normalized.jpg,0.6963922670277577,Conjunto de top e shorts,Azul e branco,"```json
+{
+  ""tipo_de_peca"": ""Conjunto de top e shorts"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predo..."
+look casual feminino azul e branco para verão,1,img_432,src/data/images/2015-cheap-clothes-china-novelty-women-jumpsuit-rompers-Two-pieces-set-hollow-out-strap-bodysuit-Floral.jpg_220x220_normalized.jpg,2015-cheap-clothes-china-novelty-women-jumpsuit-rompers-Two-pieces-set-hollow-out-strap-bodysuit-Floral.jpg_220x220_normalized.jpg,0.6918347412140895,Conjunto de duas peças (top e shorts),"Branco com estampas florais em azul, roxo, verde e rosa","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças (top e shorts)"",
+  ""ocasiao_de_uso"": ""Casual"",
+ ..."
+look casual feminino azul e branco para verão,2,img_319,src/data/images/2015-Summer-style-2-piece-set-women-shorts-and-top-fashion-White-cropped-floral-print-pants.jpg_220x220.jpg,2015-Summer-style-2-piece-set-women-shorts-and-top-fashion-White-cropped-floral-print-pants.jpg_220x220.jpg,0.6822825311141701,Conjunto de top cropped e shorts,"Branco, vermelho, rosa e azul","```json
+{
+  ""tipo_de_peca"": ""Conjunto de top cropped e shorts"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cor..."
+look casual feminino azul e branco para verão,3,img_126,src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,0.6810482196914432,Conjunto de duas peças (top e shorts),"Vermelho, Azul","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças (top e shorts)"",
+  ""ocasiao_de_uso"": ""Casual"",
+ ..."
+macaquinho com estampa de oncinha para o verão,1,img_229,src/data/images/2015-summer-woman-jumpsuits-sleeveless-black-printing-side-fashion-casual-suit-Slim-Sexy-Hot-Mini-Set.jpg_220x220.jpg,2015-summer-woman-jumpsuits-sleeveless-black-printing-side-fashion-casual-suit-Slim-Sexy-Hot-Mini-Set.jpg_220x220.jpg,0.7470492499355912,macaquinho,preto e branco,"```json
+{
+  ""tipo_de_peca"": ""macaquinho"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""pr..."
+macaquinho com estampa de oncinha para o verão,2,img_342,src/data/images/2015-summer-woman-in-black-suit-suspenders-shorts-suit-sleeveless-v-neck-casual-fashion-hot-sexy.jpg_220x220.jpg,2015-summer-woman-in-black-suit-suspenders-shorts-suit-sleeveless-v-neck-casual-fashion-hot-sexy.jpg_220x220.jpg,0.7455629327255966,Macaquinho,"Preto com estampas florais em tons de branco, rosa e verde","```json
+{
+  ""tipo_de_peca"": ""Macaquinho"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predominantes"": ""Pr..."
+macaquinho com estampa de oncinha para o verão,3,img_356,src/data/images/rompers-womens-jumpsuit-2015-fashion-Pierced-printing-roupas-femininas-bodysuit-overalls-for-women-235.jpg_220x220_normalized.jpg,rompers-womens-jumpsuit-2015-fashion-Pierced-printing-roupas-femininas-bodysuit-overalls-for-women-235.jpg_220x220_normalized.jpg,0.7413995503961592,Macaquinho,"Preto, Branco, Rosa, Bege","```json
+{
+  ""tipo_de_peca"": ""Macaquinho"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predominantes"": [""P..."
+peça feminina sensual com animal print,1,img_381,src/data/images/2015-Hot-New-Arrival-Spring-Womens-Sleeveless-Short-Jumpsuit-Printed-Leopard-Strapless-Bodycon-Dress-Tank-Tops.jpg_220x220.jpg,2015-Hot-New-Arrival-Spring-Womens-Sleeveless-Short-Jumpsuit-Printed-Leopard-Strapless-Bodycon-Dress-Tank-Tops.jpg_220x220.jpg,0.6425104503896435,Macaquinho,"Marrom, preto, bege","```json
+{
+  ""tipo_de_peca"": ""Macaquinho"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predominantes"": ""Ma..."
+peça feminina sensual com animal print,2,img_93,src/data/images/2014-new-Fashion-Women-s-Sexy-Shorts-Bodycon-Bandage-Jumpsuit-women-s-clothes-lace-printed-Bodysuit.jpg_220x220_normalized.jpg,2014-new-Fashion-Women-s-Sexy-Shorts-Bodycon-Bandage-Jumpsuit-women-s-clothes-lace-printed-Bodysuit.jpg_220x220_normalized.jpg,0.6292651618962007,Macaquinho,"Multicolorido com destaque para verde, roxo, rosa e branco","```json
+{
+  ""tipo_de_peca"": ""Macaquinho"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predominantes"": ""Mu..."
+peça feminina sensual com animal print,3,img_199,src/data/images/EXCLUSIVE-women-jumpsuits-summer-2015-fashion-bandage-halterneck-solid-khaki-loose-sexy-v-neck-casual-romper.jpg_220x220_normalized.jpg,EXCLUSIVE-women-jumpsuits-summer-2015-fashion-bandage-halterneck-solid-khaki-loose-sexy-v-neck-casual-romper.jpg_220x220_normalized.jpg,0.617606761753522,macaquinho,caqui,"```json
+{
+  ""tipo_de_peca"": ""macaquinho"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""ca..."
+roupa casual de verão com padrão de oncinha em tons marrons,1,img_117,src/data/images/2015-New-Arrival-summer-women-v-neck-strap-casual-sexy-mini-jumpsuit-Backless-elastic-waist-tassel.jpg_220x220.jpg,2015-New-Arrival-summer-women-v-neck-strap-casual-sexy-mini-jumpsuit-Backless-elastic-waist-tassel.jpg_220x220.jpg,0.6696772970942358,macaquinho,branco com estampas coloridas,"```json
+{
+  ""tipo_de_peca"": ""macaquinho"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""br..."
+roupa casual de verão com padrão de oncinha em tons marrons,2,img_432,src/data/images/2015-cheap-clothes-china-novelty-women-jumpsuit-rompers-Two-pieces-set-hollow-out-strap-bodysuit-Floral.jpg_220x220_normalized.jpg,2015-cheap-clothes-china-novelty-women-jumpsuit-rompers-Two-pieces-set-hollow-out-strap-bodysuit-Floral.jpg_220x220_normalized.jpg,0.6550928780658473,Conjunto de duas peças (top e shorts),"Branco com estampas florais em azul, roxo, verde e rosa","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças (top e shorts)"",
+  ""ocasiao_de_uso"": ""Casual"",
+ ..."
+roupa casual de verão com padrão de oncinha em tons marrons,3,img_126,src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,0.6504807553374634,Conjunto de duas peças (top e shorts),"Vermelho, Azul","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças (top e shorts)"",
+  ""ocasiao_de_uso"": ""Casual"",
+ ..."
+macaquinho branco liso feminino para verão,1,img_298,src/data/images/2015-New-Arrival-summer-women-o-neck-sleeveless-strap-sexy-mini-loose-jumpsuit-Lace-stiching-hollow.jpg_220x220.jpg,2015-New-Arrival-summer-women-o-neck-sleeveless-strap-sexy-mini-loose-jumpsuit-Lace-stiching-hollow.jpg_220x220.jpg,0.7476137733481065,macaquinho,branco,"```json
+{
+  ""tipo_de_peca"": ""macaquinho"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""br..."
+macaquinho branco liso feminino para verão,2,img_262,src/data/images/2015-new-summer-women-fashion-European-and-American-sexy-jumpsuits-patchwork-o-neck-loose-dress-HQ1112.jpg_220x220.jpg,2015-new-summer-women-fashion-European-and-American-sexy-jumpsuits-patchwork-o-neck-loose-dress-HQ1112.jpg_220x220.jpg,0.746989030693629,Macaquinho,Branco,"```json
+{
+  ""tipo_de_peca"": ""Macaquinho"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predominantes"": ""Br..."
+macaquinho branco liso feminino para verão,3,img_434,src/data/images/2015-new-arrival-women-fashion-v-neck-flower-printed-casual-mini-jumpsuit-Short-sleeves-decoration-with.jpg_220x220.jpg,2015-new-arrival-women-fashion-v-neck-flower-printed-casual-mini-jumpsuit-Short-sleeves-decoration-with.jpg_220x220.jpg,0.7384854275003498,macaquinho,"branco, roxo, verde","```json
+{
+  ""tipo_de_peca"": ""macaquinho"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": [""b..."
+roupa moderna branca casual feminina,1,img_232,src/data/images/New-design-2015-fashion-summer-dress-fashion-solid-O-neck-mini-beach-white-women-dress-Hot.jpg_220x220_normalized.jpg,New-design-2015-fashion-summer-dress-fashion-solid-O-neck-mini-beach-white-women-dress-Hot.jpg_220x220_normalized.jpg,0.6805977741802769,vestido,branco,"```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""branc..."
+roupa moderna branca casual feminina,2,img_305,src/data/images/2015-new-casual-fashion-summer-dress-A-line-white-sleeveless-V-neck-sexy-mini-striped-beach.jpg_220x220.jpg,2015-new-casual-fashion-summer-dress-A-line-white-sleeveless-V-neck-sexy-mini-striped-beach.jpg_220x220.jpg,0.6721604176028405,vestido,branco e preto,"```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""branc..."
+roupa moderna branca casual feminina,3,img_285,src/data/images/-Women-Short-Sleeve-Chiffon-Shirt-Blouse-Striped-Shorts-Hot-Pants-Sets.jpg_220x220.jpg,-Women-Short-Sleeve-Chiffon-Shirt-Blouse-Striped-Shorts-Hot-Pants-Sets.jpg_220x220.jpg,0.6706670051361545,Conjunto de blusa e shorts,Branco com listras pretas,"```json
+{
+  ""tipo_de_peca"": ""Conjunto de blusa e shorts"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_pre..."
+peça de algodão branca para o verão estilo moderno,1,img_305,src/data/images/2015-new-casual-fashion-summer-dress-A-line-white-sleeveless-V-neck-sexy-mini-striped-beach.jpg_220x220.jpg,2015-new-casual-fashion-summer-dress-A-line-white-sleeveless-V-neck-sexy-mini-striped-beach.jpg_220x220.jpg,0.7151103136477934,vestido,branco e preto,"```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""branc..."
+peça de algodão branca para o verão estilo moderno,2,img_394,src/data/images/2015-new-casual-fashion-summer-dress-A-line-white-sleeveless-V-neck-sexy-mini-striped-beach.jpg_220x220_normalized.jpg,2015-new-casual-fashion-summer-dress-A-line-white-sleeveless-V-neck-sexy-mini-striped-beach.jpg_220x220_normalized.jpg,0.707029567643944,vestido,branco e preto,"```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""branc..."
+peça de algodão branca para o verão estilo moderno,3,img_232,src/data/images/New-design-2015-fashion-summer-dress-fashion-solid-O-neck-mini-beach-white-women-dress-Hot.jpg_220x220_normalized.jpg,New-design-2015-fashion-summer-dress-fashion-solid-O-neck-mini-beach-white-women-dress-Hot.jpg_220x220_normalized.jpg,0.6999959120323657,vestido,branco,"```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""branc..."
+conjunto feminino estampado para clima quente,1,img_432,src/data/images/2015-cheap-clothes-china-novelty-women-jumpsuit-rompers-Two-pieces-set-hollow-out-strap-bodysuit-Floral.jpg_220x220_normalized.jpg,2015-cheap-clothes-china-novelty-women-jumpsuit-rompers-Two-pieces-set-hollow-out-strap-bodysuit-Floral.jpg_220x220_normalized.jpg,0.6995249220173183,Conjunto de duas peças (top e shorts),"Branco com estampas florais em azul, roxo, verde e rosa","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças (top e shorts)"",
+  ""ocasiao_de_uso"": ""Casual"",
+ ..."
+conjunto feminino estampado para clima quente,2,img_390,src/data/images/2015-new-fashion-women-s-cool-beach-style-red-printed-two-pieces-novelty-casual-backless-sexy.jpg_220x220.jpg,2015-new-fashion-women-s-cool-beach-style-red-printed-two-pieces-novelty-casual-backless-sexy.jpg_220x220.jpg,0.6875651231729566,Conjunto de top e shorts,Vermelho e branco,"```json
+{
+  ""tipo_de_peca"": ""Conjunto de top e shorts"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predo..."
+conjunto feminino estampado para clima quente,3,img_126,src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg,0.676834809464878,Conjunto de duas peças (top e shorts),"Vermelho, Azul","```json
+{
+  ""tipo_de_peca"": ""Conjunto de duas peças (top e shorts)"",
+  ""ocasiao_de_uso"": ""Casual"",
+ ..."
+macaquinho leve para dia quente,1,img_3,src/data/images/Women-Short-Jumpsuits-S-M-L-Sexy-Women-Casual-Jumpsuits-Summer-2015-Sleeveless-O-Neck-Overalls.jpg_220x220_normalized.jpg,Women-Short-Jumpsuits-S-M-L-Sexy-Women-Casual-Jumpsuits-Summer-2015-Sleeveless-O-Neck-Overalls.jpg_220x220_normalized.jpg,0.7235846726585473,macaquinho,azul claro,"```json
+{
+  ""tipo_de_peca"": ""macaquinho"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""az..."
+macaquinho leve para dia quente,2,img_229,src/data/images/2015-summer-woman-jumpsuits-sleeveless-black-printing-side-fashion-casual-suit-Slim-Sexy-Hot-Mini-Set.jpg_220x220.jpg,2015-summer-woman-jumpsuits-sleeveless-black-printing-side-fashion-casual-suit-Slim-Sexy-Hot-Mini-Set.jpg_220x220.jpg,0.7221936687187016,macaquinho,preto e branco,"```json
+{
+  ""tipo_de_peca"": ""macaquinho"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": ""pr..."
+macaquinho leve para dia quente,3,img_66,src/data/images/New-Women-Summer-Fashion-Print-Jumpsuits-Vestidos-Femininos-2015-Plus-Size-Casual-chiffon-Jumpsuits-hollow-out.jpg_220x220_normalized.jpg,New-Women-Summer-Fashion-Print-Jumpsuits-Vestidos-Femininos-2015-Plus-Size-Casual-chiffon-Jumpsuits-hollow-out.jpg_220x220_normalized.jpg,0.7206159760908036,Macaquinho,"Bordô, Rosa, Bege","```json
+{
+  ""tipo_de_peca"": ""Macaquinho"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predominantes"": ""Bo..."
+roupa com estampa animal para mulher,1,img_283,src/data/images/HONEY-2015-Leopard-Print-jumpsuit-women-jumpsuit-lace-neck-jumpsuit-macacao-feminino.jpg_220x220_normalized.jpg,HONEY-2015-Leopard-Print-jumpsuit-women-jumpsuit-lace-neck-jumpsuit-macacao-feminino.jpg_220x220_normalized.jpg,0.6244841412080555,macacão,"marrom, preto, bege","```json
+{
+  ""tipo_de_peca"": ""macacão"",
+  ""ocasiao_de_uso"": ""casual"",
+  ""cores_predominantes"": [""marr..."
+roupa com estampa animal para mulher,2,img_78,src/data/images/2015-summer-woman-in-black-suit-suspenders-shorts-suit-sleeveless-v-neck-casual-fashion-hot-sexy.jpg_220x220_normalized.jpg,2015-summer-woman-in-black-suit-suspenders-shorts-suit-sleeveless-v-neck-casual-fashion-hot-sexy.jpg_220x220_normalized.jpg,0.6110056930265102,Macaquinho,Preto com estampas florais em tons metálicos,"```json
+{
+  ""tipo_de_peca"": ""Macaquinho"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predominantes"": ""Pr..."
+roupa com estampa animal para mulher,3,img_21,src/data/images/2015-new-design-for-women-Jumpsuits-casual-cute-printed-deep-v-neck-hot-sale-fashion-women.jpg_220x220.jpg,2015-new-design-for-women-Jumpsuits-casual-cute-printed-deep-v-neck-hot-sale-fashion-women.jpg_220x220.jpg,0.6091652905303131,Macaquinho,"Roxo, Vermelho, Verde, Branco","```json
+{
+  ""tipo_de_peca"": ""Macaquinho"",
+  ""ocasiao_de_uso"": ""Casual"",
+  ""cores_predominantes"": [""R..."
+vestido vermelho elegante para ocasião formal,1,img_134,src/data/images/Mulheres-vestidos-de-inverno-xadrez-decote-em-v-festa-&agrave_-noite-elegante-cl&aacute_ssica-a-linha-marca.jpg_220x220.jpg,Mulheres-vestidos-de-inverno-xadrez-decote-em-v-festa-&agrave_-noite-elegante-cl&aacute_ssica-a-linha-marca.jpg_220x220.jpg,0.7154723417556555,vestido,vermelho e preto,"```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""elegante, festa à noite"",
+  ""cores_predo..."
+vestido vermelho elegante para ocasião formal,2,img_38,src/data/images/Mulheres-vestidos-de-inverno-xadrez-decote-em-v-festa-&agrave_-noite-elegante-cl&aacute_ssica-a-linha-marca.jpg_220x220_normalized.jpg,Mulheres-vestidos-de-inverno-xadrez-decote-em-v-festa-&agrave_-noite-elegante-cl&aacute_ssica-a-linha-marca.jpg_220x220_normalized.jpg,0.7020797649491389,vestido,"vermelho, preto","```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""festa à noite, elegante"",
+  ""cores_predo..."
+vestido vermelho elegante para ocasião formal,3,img_157,src/data/images/Sexy-Women-Dress-See-Through-Elegant-Tulle-Hollow-Backless-Formal-White-Long-Sleeve-Lace-Prom-Dresses.jpg_220x220_normalized.jpg,Sexy-Women-Dress-See-Through-Elegant-Tulle-Hollow-Backless-Formal-White-Long-Sleeve-Lace-Prom-Dresses.jpg_220x220_normalized.jpg,0.6898135673238346,vestido,branco,"```json
+{
+  ""tipo_de_peca"": ""vestido"",
+  ""ocasiao_de_uso"": ""formal"",
+  ""cores_predominantes"": ""branc..."

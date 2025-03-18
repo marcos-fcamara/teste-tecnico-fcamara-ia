@@ -1,32 +1,47 @@
 [
   {
-    "query": "Comprar macacão curto para verão",
-    "categoria": "macacão curto",
-    "intenção": "Usuário busca por um macacão curto apropriado para a estação do verão."
+    "query": "Vestido longo floral para festas de verão com decote profundo",
+    "categoria": "ocasião",
+    "intenção": "Procurar uma peça elegante para uma festa de verão"
   },
   {
-    "query": "Macaquinho feminino estampado para passeio",
-    "categoria": "Macaquinho",
-    "intenção": "Usuário deseja encontrar macaquinhos femininos com estampas adequadas para usar em passeios casuais."
+    "query": "Macaquinho sexy azul escuro para festas de verão",
+    "categoria": "ocasião",
+    "intenção": "Encontrar um macaquinho estiloso para uma festa de verão"
   },
   {
-    "query": "Conjunto de top e shorts para academia",
-    "categoria": "Conjunto de top e shorts",
-    "intenção": "Usuário está procurando um conjunto de top e shorts específico para atividades físicas, especialmente para usar na academia."
+    "query": "Vestido elegante preto e branco para eventos formais na primavera",
+    "categoria": "ocasião",
+    "intenção": "Buscar uma roupa sofisticada para um evento formal na primavera"
   },
   {
-    "query": "vestidos leves para a estação primavera",
-    "categoria": "primavera",
-    "intenção": "Usuário busca vestidos adequados para a estação da primavera, com tecidos leves e estampas florais."
+    "query": "vestido florido para festas de verão com decote especial",
+    "categoria": "estação",
+    "intenção": "Buscar vestidos adequados para festas durante o verão, com foco em estampas florais e detalhes no decote."
   },
   {
-    "query": "roupas de banho coleção verão 2023",
-    "categoria": "verão",
-    "intenção": "Usuário deseja encontrar roupas de banho atualizadas para a temporada de verão de 2023, incluindo biquínis, maiôs e sungas."
+    "query": "roupa formal primavera preto e branco",
+    "categoria": "estação",
+    "intenção": "Encontrar roupas de estilo formal para usar na primavera, especificamente em cores preto e branco."
   },
   {
-    "query": "camisetas de algodão para primavera/verão",
-    "categoria": "primavera/verão",
-    "intenção": "Usuário busca camisetas feitas de algodão, confortáveis para usar nas estações de primavera e verão."
+    "query": "conjunto de praia verão preto e branco",
+    "categoria": "estação",
+    "intenção": "Procurar conjuntos de roupas apropriados para a praia no verão, com ênfase em combinação de cores preto e branco."
+  },
+  {
+    "query": "Quero um vestido longo floral com cores vibrantes, perfeito para festas de verão",
+    "categoria": "cor",
+    "intenção": "Encontrar um vestido longo com padrão floral em cores vivas para usar em festas de verão"
+  },
+  {
+    "query": "Preciso de um conjunto de top e shorts em preto e branco para a praia neste verão",
+    "categoria": "cor",
+    "intenção": "Procurar um conjunto de roupa praiana com uma combinação clássica de preto e branco"
+  },
+  {
+    "query": "Estou buscando um macaquinho azul escuro sexy para festas noturnas",
+    "categoria": "cor",
+    "intenção": "Encontrar um macaquinho em tom de azul escuro adequado para eventos noturnos"
   }
 ]

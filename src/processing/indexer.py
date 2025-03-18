@@ -223,7 +223,7 @@ class ImageIndexer:
 
     @cached_query(CacheManager())
     def search_by_text(
-        self, query_text: str, limit: int = 5, high_quality: bool = True
+        self, query_text: str, limit: int = 5, high_quality: bool = True, reuse_embeddings: bool = False
     ) -> Dict[str, Any]:
         """
         Busca imagens por texto com técnicas avançadas para alta similaridade.
@@ -232,6 +232,7 @@ class ImageIndexer:
             query_text: Texto da consulta.
             limit: Número máximo de resultados.
             high_quality: Se True, usa técnicas avançadas para maximizar a similaridade.
+            reuse_embeddings: Se True, usa apenas embeddings em cache sem chamar a API.
 
         Returns:
             Dict: Resultados da busca.
@@ -240,17 +241,30 @@ class ImageIndexer:
             logger.info(f"Iniciando busca para consulta: '{query_text}'")
             logger.info(f"Modo de alta qualidade: {high_quality}")
             logger.info(f"Limite de resultados: {limit}")
-            # Tenta usar o método enhance_query do TextProcessor
-            if callable(getattr(self.text_processor, 'enhance_query', None)):
-                enhanced_query = self.text_processor.enhance_query(query_text)
-            else:
-            # Usa o método de enhance_query do próprio indexer
-                enhanced_query = self.enhance_query(query_text)
+            logger.info(f"Modo reuse_embeddings: {reuse_embeddings}")
             
-            # Resto do código permanece igual
+            # Tenta usar o método enhance_query do TextProcessor
+            if reuse_embeddings:
+                # Se estamos reutilizando embeddings, verifica o cache primeiro
+                cached_query = self.cache_manager.get_cached_query_results(
+                    f"enhance_v2_{query_text}", 1
+                )
+                if cached_query:
+                    logger.info(f"Usando consulta aprimorada em cache")
+                    enhanced_query = cached_query.get("enhanced_query", query_text)
+                else:
+                    # Se não encontrar no cache e estiver no modo reuse, use a consulta original
+                    logger.info(f"Consulta não encontrada no cache e modo reuse ativado. Usando consulta original.")
+                    enhanced_query = query_text
+            else:
+                # Modo normal, faz chamada à API se necessário
+                if callable(getattr(self.text_processor, 'enhance_query', None)):
+                    enhanced_query = self.text_processor.enhance_query(query_text)
+                else:
+                    enhanced_query = self.enhance_query(query_text)
+            
+            # Verificar cache para a consulta completa
             cache_key = f"high_quality_{query_text}" if high_quality else query_text
-
-            # Verificar cache primeiro
             cached_results = self.cache_manager.get_cached_query_results(
                 cache_key, limit
             )
@@ -258,173 +272,216 @@ class ImageIndexer:
                 logger.info(f"Usando resultados em cache para consulta: '{query_text}'")
                 return cached_results
 
-            logger.info(f"Processando consulta avançada: '{query_text}'")
-
-            # Extrai características da consulta para ponderação
-            import re
-
-            # Configuração de pesos para características específicas
-            feature_weights = {
-                "tipo_peca": 2.0,  # Tipo de peça tem peso mais alto
-                "cor": 1.5,  # Cor tem peso médio-alto
-                "padrao": 1.2,  # Padrão/estampa tem peso médio
-                "estilo": 1.8,  # Estilo tem peso alto
-                "ocasiao": 1.5,  # Ocasião de uso tem peso médio-alto
-                "genero": 1.3,  # Gênero tem peso médio
-                "estacao": 1.0,  # Estação tem peso normal
-                "material": 1.0,  # Material tem peso normal
-            }
-
-            # Processo de busca avançada bi-direcional
+            # Processo de busca avançada
             if high_quality:
-                # 1. Aprimora a consulta
-                enhanced_query = self.text_processor.enhance_query(query_text)
-
-                # 2. Gera embedding de alta qualidade (ensemble)
+                # Gera embedding com flag force_local se reuse_embeddings=True
                 query_embedding = self.text_processor.generate_embedding(
-                    enhanced_query, use_ensemble=True
+                    enhanced_query, 
+                    use_ensemble=True,
+                    force_local=reuse_embeddings
                 )
+                
+                # Se estamos no modo reuse e não encontrou embedding, retornar erro
+                if reuse_embeddings and query_embedding is None:
+                    logger.warning(f"Modo reuse_embeddings ativado, mas embedding não encontrado no cache")
+                    query_embedding = self.text_processor.generate_embedding(
+                        enhanced_query, 
+                        use_ensemble=True,
+                        force_local=False  # Permite calcular novo embedding
+                    )
 
-                # 3. Busca com ponderação de características
-                initial_results = self.vector_db.query(
-                    query_embedding=query_embedding,
-                    limit=limit,
-                    feature_weights=feature_weights,
-                )
-
-                # 4. Para similaridade extremamente alta (95%+), fazemos bidirecional matching
-                # Isso significa comparar também a consulta com as descrições encontradas
-                if len(initial_results["ids"][0]) > 0:
-                    # Cria uma cópia dos resultados iniciais
-                    final_results = {
-                        "ids": initial_results["ids"].copy(),
-                        "documents": initial_results["documents"].copy(),
-                        "metadatas": initial_results["metadatas"].copy(),
-                        "distances": initial_results["distances"].copy(),
+                    return {
+                        "error": "Embedding não encontrado no cache e modo reuse_embeddings ativado"
                     }
 
-                    # Para cada resultado, verifica a similaridade no sentido inverso
-                    # (da descrição para a consulta)
-                    for i in range(len(initial_results["ids"][0])):
-                        try:
-                            # Obtém a descrição do resultado
-                            doc = initial_results["documents"][0][i]
+                logger.info(f"Processando consulta avançada: '{query_text}'")
 
-                            # Calcula o embedding da descrição
-                            # Usa apenas partes relevantes da descrição para não sobrecarregar
-                            # Extrai 500 caracteres mais relevantes
-                            import json
-                            import re
+                # Extrai características da consulta para ponderação
+                import re
 
-                            # Tenta extrair partes estruturadas (JSON) da descrição
-                            json_match = re.search(r"\{.*\}", doc, re.DOTALL)
+                # Configuração de pesos para características específicas
+                feature_weights = {
+                    "tipo_peca": 2.0,  # Tipo de peça tem peso mais alto
+                    "cor": 1.5,  # Cor tem peso médio-alto
+                    "padrao": 1.2,  # Padrão/estampa tem peso médio
+                    "estilo": 1.8,  # Estilo tem peso alto
+                    "ocasiao": 1.5,  # Ocasião de uso tem peso médio-alto
+                    "genero": 1.3,  # Gênero tem peso médio
+                    "estacao": 1.0,  # Estação tem peso normal
+                    "material": 1.0,  # Material tem peso normal
+                }
 
-                            if json_match:
-                                try:
-                                    # Se encontrou JSON, usa campos relevantes
-                                    json_data = json.loads(json_match.group(0))
-                                    relevant_parts = []
+                # Processo de busca avançada bi-direcional
+                if high_quality:
+                    # 1. Aprimora a consulta
+                    enhanced_query = self.text_processor.enhance_query(query_text)
 
-                                    # Coleta campos importantes
-                                    for field in [
-                                        "tipo_peca",
-                                        "cores_predominantes",
-                                        "padrao",
-                                        "estilo",
-                                        "ocasiao_uso",
-                                        "genero",
-                                        "estacao",
-                                        "materiais",
-                                        "descricao_completa",
-                                    ]:
-                                        if field in json_data and json_data[field]:
-                                            if isinstance(json_data[field], list):
-                                                relevant_parts.append(
-                                                    f"{field}: {', '.join(json_data[field])}"
-                                                )
-                                            else:
-                                                relevant_parts.append(
-                                                    f"{field}: {json_data[field]}"
-                                                )
+                    # 2. Gera embedding de alta qualidade (ensemble)
+                    query_embedding = self.text_processor.generate_embedding(
+                        enhanced_query, use_ensemble=True
+                    )
 
-                                    relevant_text = " ".join(relevant_parts)
-                                except:
-                                    # Se falhar ao extrair JSON, usa um trecho do documento
+                    # 3. Busca com ponderação de características
+                    initial_results = self.vector_db.query(
+                        query_embedding=query_embedding,
+                        limit=limit,
+                        feature_weights=feature_weights,
+                    )
+
+                    # 4. Para similaridade extremamente alta (95%+), fazemos bidirecional matching
+                    # Isso significa comparar também a consulta com as descrições encontradas
+                    if len(initial_results["ids"][0]) > 0:
+                        # Cria uma cópia dos resultados iniciais
+                        final_results = {
+                            "ids": initial_results["ids"].copy(),
+                            "documents": initial_results["documents"].copy(),
+                            "metadatas": initial_results["metadatas"].copy(),
+                            "distances": initial_results["distances"].copy(),
+                        }
+
+                        # Para cada resultado, verifica a similaridade no sentido inverso
+                        # (da descrição para a consulta)
+                        for i in range(len(initial_results["ids"][0])):
+                            try:
+                                # Obtém a descrição do resultado
+                                doc = initial_results["documents"][0][i]
+
+                                # Calcula o embedding da descrição
+                                # Usa apenas partes relevantes da descrição para não sobrecarregar
+                                # Extrai 500 caracteres mais relevantes
+                                import json
+                                import re
+
+                                # Tenta extrair partes estruturadas (JSON) da descrição
+                                json_match = re.search(r"\{.*\}", doc, re.DOTALL)
+
+                                if json_match:
+                                    try:
+                                        # Se encontrou JSON, usa campos relevantes
+                                        json_data = json.loads(json_match.group(0))
+                                        relevant_parts = []
+
+                                        # Coleta campos importantes
+                                        for field in [
+                                            "tipo_peca",
+                                            "cores_predominantes",
+                                            "padrao",
+                                            "estilo",
+                                            "ocasiao_uso",
+                                            "genero",
+                                            "estacao",
+                                            "materiais",
+                                            "descricao_completa",
+                                        ]:
+                                            if field in json_data and json_data[field]:
+                                                if isinstance(json_data[field], list):
+                                                    relevant_parts.append(
+                                                        f"{field}: {', '.join(json_data[field])}"
+                                                    )
+                                                else:
+                                                    relevant_parts.append(
+                                                        f"{field}: {json_data[field]}"
+                                                    )
+
+                                        relevant_text = " ".join(relevant_parts)
+                                    except:
+                                        # Se falhar ao extrair JSON, usa um trecho do documento
+                                        relevant_text = doc[:500]
+                                else:
+                                    # Se não encontrou JSON, usa um trecho do documento
                                     relevant_text = doc[:500]
-                            else:
-                                # Se não encontrou JSON, usa um trecho do documento
-                                relevant_text = doc[:500]
 
-                            # Compara a consulta com a descrição (no sentido inverso)
-                            # Isso mede quanto a consulta está contida na descrição
-                            similarity_to_query = self._calculate_similarity(
-                                enhanced_query, relevant_text
-                            )
+                                # Compara a consulta com a descrição (no sentido inverso)
+                                # Isso mede quanto a consulta está contida na descrição
+                                similarity_to_query = self._calculate_similarity(
+                                    enhanced_query, relevant_text
+                                )
 
-                            # Distância original (quanto menor, mais similar)
-                            original_distance = initial_results["distances"][0][i]
+                                # Distância original (quanto menor, mais similar)
+                                original_distance = initial_results["distances"][0][i]
 
-                            # Combina as duas métricas (bidirecional)
-                            # A fórmula equilibra quanto a consulta está na descrição e vice-versa
-                            # Damos peso maior para a direção original (75%)
-                            bidirectional_distance = (
-                                original_distance * 0.75
-                                + (1 - similarity_to_query) * 0.25
-                            )
+                                # Combina as duas métricas (bidirecional)
+                                # A fórmula equilibra quanto a consulta está na descrição e vice-versa
+                                # Damos peso maior para a direção original (75%)
+                                bidirectional_distance = (
+                                    original_distance * 0.75
+                                    + (1 - similarity_to_query) * 0.25
+                                )
 
-                            # Atualiza a distância com o valor combinado
-                            final_results["distances"][0][i] = bidirectional_distance
+                                # Atualiza a distância com o valor combinado
+                                final_results["distances"][0][i] = bidirectional_distance
 
-                        except Exception as e:
-                            logger.debug(
-                                f"Erro ao processar similaridade bidirecional: {str(e)}"
-                            )
+                            except Exception as e:
+                                logger.debug(
+                                    f"Erro ao processar similaridade bidirecional: {str(e)}"
+                                )
 
-                    # Reordena os resultados com base nas novas distâncias
-                    # Crimos uma lista de tuplas (índice, distância)
-                    items = [
-                        (i, final_results["distances"][0][i])
-                        for i in range(len(final_results["distances"][0]))
-                    ]
-
-                    # Ordena pela distância (menor primeiro)
-                    items.sort(key=lambda x: x[1])
-
-                    # Reordena todos os arrays de resultado
-                    for key in ["ids", "documents", "metadatas", "distances"]:
-                        final_results[key] = [
-                            [final_results[key][0][item[0]] for item in items[:limit]]
+                        # Reordena os resultados com base nas novas distâncias
+                        # Crimos uma lista de tuplas (índice, distância)
+                        items = [
+                            (i, final_results["distances"][0][i])
+                            for i in range(len(final_results["distances"][0]))
                         ]
 
-                    # Amplia similaridade para resultados de alta qualidade
-                    # Isso ajusta as distâncias para que bons resultados fiquem mais próximos de 1.0
-                    for i in range(len(final_results["distances"][0])):
-                        distance = final_results["distances"][0][i]
-                        similarity = 1 - distance
+                        # Ordena pela distância (menor primeiro)
+                        items.sort(key=lambda x: x[1])
 
-                        # Para similaridades já altas, amplificamos para aproximar de 95%+
-                        if similarity > 0.85:
-                            amplified_similarity = (
-                                similarity + (0.98 - similarity) * 0.8
-                            )
-                            final_results["distances"][0][i] = 1 - amplified_similarity
+                        # Reordena todos os arrays de resultado
+                        for key in ["ids", "documents", "metadatas", "distances"]:
+                            final_results[key] = [
+                                [final_results[key][0][item[0]] for item in items[:limit]]
+                            ]
 
-                    result_data = {
-                        "query": query_text,
-                        "enhanced_query": enhanced_query,
-                        "results": final_results,
+                        # Amplia similaridade para resultados de alta qualidade
+                        # Isso ajusta as distâncias para que bons resultados fiquem mais próximos de 1.0
+                        for i in range(len(final_results["distances"][0])):
+                            distance = final_results["distances"][0][i]
+                            similarity = 1 - distance
+
+                            # Para similaridades já altas, amplificamos para aproximar de 95%+
+                            if similarity > 0.85:
+                                amplified_similarity = (
+                                    similarity + (0.98 - similarity) * 0.8
+                                )
+                                final_results["distances"][0][i] = 1 - amplified_similarity
+
+                        result_data = {
+                            "query": query_text,
+                            "enhanced_query": enhanced_query,
+                            "results": final_results,
+                        }
+                    else:
+                        # Se não encontrou resultados, retorna os resultados iniciais
+                        result_data = {
+                            "query": query_text,
+                            "enhanced_query": enhanced_query,
+                            "results": initial_results,
+                        }
+                
+            else:
+                # Busca padrão, ajustada para o modo reuse
+                if reuse_embeddings:
+                    # Tenta obter embedding diretamente do cache
+                    query_embedding = self.text_processor.generate_embedding(
+                        enhanced_query, 
+                        use_ensemble=False,
+                        force_local=True
+                    )
+                    
+                    if query_embedding is None:
+                        logger.warning(f"Modo reuse_embeddings ativado, mas embedding não encontrado no cache")
+                        return {
+                            "error": "Embedding não encontrado no cache e modo reuse_embeddings ativado"
+                        }
+                        
+                    query_data = {
+                        "embedding": query_embedding,
+                        "enhanced_query": enhanced_query
                     }
                 else:
-                    # Se não encontrou resultados, retorna os resultados iniciais
-                    result_data = {
-                        "query": query_text,
-                        "enhanced_query": enhanced_query,
-                        "results": initial_results,
-                    }
-            else:
-                # Busca padrão (sem técnicas avançadas)
-                query_data = self.text_processor.process_query(query_text, enhance=True)
-
+                    # Modo normal
+                    query_data = self.text_processor.process_query(query_text, enhance=True)
+                    
                 results = self.vector_db.query(
                     query_embedding=query_data["embedding"], limit=limit
                 )
