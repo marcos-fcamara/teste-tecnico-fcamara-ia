@@ -1,13 +1,14 @@
-# Teste Técnico fCamara - Engenheiro de IA
+# Sistema de Busca Semântica de Moda
 
 Sistema cloud-native que permite busca em linguagem natural por itens de moda, aproveitando os modelos de visão e embedding da OpenAI para entender e combinar descrições de roupas. O sistema processa imagens de moda, gera descrições detalhadas e permite busca semântica através de embeddings vetoriais.
 
+![Diagrama de Arquitetura](docs/containers.png)
+
 ## Principais Características
 
-- Pipeline de normalização de imagem para qualidade consistente
+- Pipeline de processamento de imagem para qualidade consistente
 - Descrições detalhadas de itens de moda usando GPT-4V
 - Busca semântica usando embeddings de texto com pesos personalizados
-- API RESTful para operações de busca
 - Armazenamento em banco de dados vetorial escalável usando ChromaDB
 - Ferramentas abrangentes de teste e avaliação
 - Sistema de cache eficiente para descrições e embeddings
@@ -16,20 +17,20 @@ Sistema cloud-native que permite busca em linguagem natural por itens de moda, a
 
 ```
 teste-tecnico-fcamara/
-├── docs/                      # Diagramas de arquitetura e componentes
-├── src/                      # Código-fonte principal da aplicação
-│   ├── api/                 # Aplicação FastAPI para endpoints de busca
+├── docs/                    # Diagramas de arquitetura e componentes
+├── src/                     # Código-fonte principal da aplicação
 │   ├── database/            # Implementação de banco de dados vetorial usando ChromaDB
 │   └── processing/          # Componentes de processamento de imagem e texto
-│       ├── image_normalizer.py  # Melhoria de qualidade de imagem
-│       ├── image_processor.py   # Geração de descrição de imagem
+│       ├── image_processor.py  # Geração de descrição de imagem
 │       └── indexer.py          # Indexação vetorial e busca
-├── tools/                    # Utilitários de teste e avaliação
-│   ├── scripts/              # Scripts para extração e processamento de descrições
-│   ├── search_tests_results/  # Resultados de avaliação de qualidade de busca
+├── tools/                   # Utilitários de teste e avaliação
+│   ├── scripts/             # Scripts para extração e processamento de descrições
+│   ├── results/search_report/  # Resultados de avaliação de qualidade de busca
 │   └── test_results/         # Relatórios de teste de embedding
-└── requirements.txt          # Dependências Python
+└── requirements.txt         # Dependências Python
 ```
+
+![Diagrama de Componentes](docs/components.png)
 
 ## Decisões Técnicas
 
@@ -38,85 +39,56 @@ teste-tecnico-fcamara/
 #### GPT-4V para Processamento de Imagens
 - **Motivo da escolha**: Capacidade superior de interpretar e descrever detalhes visuais em peças de moda
 - **Benefícios**: Descrições ricas que capturam nuances de estilo, cores, padrões e elementos de design
-- **Otimizações**: 
-  - Implementação de prompts específicos para moda gerando descrições estruturadas em formato JSON
-  - Extração de atributos categorizados (tipo de peça, cores, ocasião, estilo, etc.) para enriquecimento de metadados
+- **Implementação**: 
+  - Prompts específicos para moda gerando descrições estruturadas em formato JSON
+  - Extração de atributos categorizados (tipo de peça, cores, ocasião, estilo, etc.)
   - Descrições completas em linguagem natural para melhor matching semântico
 
 #### ChromaDB para Armazenamento Vetorial
 - **Motivo da escolha**: Solução leve, eficiente e cloud-native para embeddings
 - **Benefícios**: API intuitiva, excelente desempenho para bases de médio porte, persistência integrada
-- **Otimizações**: 
-  - Configuração de índices otimizados para busca por similaridade de coseno
-  - Armazenamento de metadados ricos junto com os vetores para facilitar a filtragem e apresentação
+- **Implementação**: 
+  - Índices otimizados para busca por similaridade de coseno
+  - Armazenamento de metadados enriquecidos com os vetores
   - Sistema de pesos personalizados para diferentes atributos durante a recuperação
-
-#### FastAPI para Interface de API
-- **Motivo da escolha**: Framework moderno, de alto desempenho e tipado
-- **Benefícios**: Documentação automática, validação de dados, async/await nativo
-- **Otimizações**: 
-  - Implementação de endpoints assíncronos para melhor escalabilidade
-  - Middleware para cache de requisições frequentes
-  - Throttling inteligente para evitar sobrecarga da API OpenAI
 
 ### 2. Inovações Implementadas
 
 #### Sistema de Pesos Dinâmicos para Atributos
-- Implementação de um sistema que atribui pesos diferentes a cada atributo das peças (cor, tipo, estilo)
-- Ajuste dinâmico de pesos com base na consulta do usuário (ex: consultas que mencionam cores têm peso maior no atributo cor)
-- Resultados experimentais mostram melhoria de ~8% na relevância dos resultados comparado com busca sem pesos
+- Implementação que atribui pesos diferentes a cada atributo das peças (cor, tipo, estilo)
+- Ajuste dinâmico de pesos com base na consulta do usuário
+- Resultados experimentais mostram melhoria de ~8% na relevância dos resultados
 
-#### Parsing Robusto de Descrições JSON
-- Implementação de um parser que lida com diferentes formatações de JSON em strings markdown
-- Extração inteligente de atributos com diferentes padrões de nomenclatura (camelCase, snake_case, etc.)
-- Tratamento adequado para valores em diferentes formatos (strings, arrays, objetos aninhados)
+#### Parsing de Descrições JSON
+- Parser que lida com diferentes formatações de JSON em strings markdown
+- Extração de atributos com diferentes padrões de nomenclatura
+- Tratamento para valores em diferentes formatos (strings, arrays, objetos)
 
-#### Pipeline de Extração e Transformação de Dados
-- Scripts otimizados para extração eficiente de descrições de arquivos JSON em cache
-- Transformação automática em datasets estruturados para treinamento e avaliação
-- Geração automática de consultas de teste baseadas nos dados extraídos
+#### Pipeline de Processamento de Dados
+- Scripts para extração eficiente de descrições
+- Transformação em datasets estruturados para avaliação
+- Geração de consultas de teste baseadas nos dados extraídos
 
 ### 3. Otimizações de Performance
-
-#### Pipeline de Normalização de Imagem
-- Pré-processamento para garantir qualidade consistente (resolução, contraste, brilho)
-- Uso de cache para evitar processamento repetitivo de imagens
-- Implementação de processamento em lote para chamadas à API OpenAI
 
 #### Estratégias de Caching
 - Cache em memória para embeddings frequentemente acessados
 - Cache de disco para descrições de imagens geradas
-- Persistência de resultados de processamento intermediários com gestão de TTL (Time-To-Live)
-- Otimização de I/O para leitura e escrita eficiente de arquivos de cache
+- Persistência de resultados de processamento intermediários
 
 #### Paralelização
 - Implementação de processamento paralelo para indexação em lote
-- Uso de workers assíncronos para tarefas intensivas de CPU
 - Estratégia de backoff exponencial para lidar com limites de taxa da API OpenAI
-- Processamento distribuído de imagens para escalabilidade horizontal
-
-### 4. Avaliação de Qualidade
-
-#### Métricas de Similaridade
-- Desenvolvimento de sistema de avaliação de qualidade de busca
-- Monitoramento de similaridade média, mínima e máxima
-- Análise de distribuição de similaridade por posição no ranking
-- Métricas personalizadas para avaliar relevância semântica dos resultados
-
-#### Testes Automáticos
-- Testes unitários para componentes críticos
-- Testes de integração para pipeline completo
-- Testes de carga para avaliar limites de escala
-- Avaliação automática da qualidade das descrições geradas
+- Processamento de imagens para escalabilidade horizontal
 
 ## Métricas de Desempenho do Sistema
 
 ### Similaridade por Posição de Ranking
 | Rank | Média | Mínimo | Máximo |
 |------|-------|--------|--------|
-| 1    | 0.7138| 0.6616 | 0.7608 |
-| 2    | 0.7088| 0.6514 | 0.7552 |
-| 3    | 0.7040| 0.6496 | 0.7525 |
+| 1    | 0.6998| 0.6245 | 0.7476 |
+| 2    | 0.6896| 0.6110 | 0.7470 |
+| 3    | 0.6870| 0.6092 | 0.7414 |
 
 ### Similaridade Média por Tipo de Consulta
 | Tipo de Consulta | Similaridade Média |
@@ -129,33 +101,25 @@ teste-tecnico-fcamara/
 
 ## Exemplos de Consultas e Resultados
 
-### Consulta: "Macaquinho azul escuro estilo sexy para festa de verão"
+### Consulta: "Vestido boho estampado: Vestido curto, solto, estampado em azul e verde, mangas três quartos, decote V, estilo praiano."
 | Rank | Imagem | Tipo de Peça | Cores | Similaridade |
 |------|--------|--------------|-------|--------------|
-| 1 | img_238 | macaquinho | azul e branco | 0.7350 |
-| 2 | img_366 | Macaquinho | Branco, verde, laranja | 0.7269 |
-| 3 | img_252 | macaquinho | azul marinho e branco | 0.7264 |
+| 1 | ![Vestido](src/data/images/2015-new-style-casual-fashion-summer-dress-loose-printed-three-quarter-V-neck-sexy-mini-beach.jpg_220x220_normalized.jpg) | vestido | azul claro, verde, preto | 0.7346 |
+| 3 | ![Vestido](src/data/images/new-style-2015-sheath-summer-dress-three-quarter-printed-V-neck-chiffon-cotton-lace-beach-Mini.jpg_220x220_normalized.jpg) | vestido | branco, azul, laranja, verde | 0.7176 |
 
-### Consulta: "Vestido preto e branco elegante para ocasiões formais na primavera"
+### Consulta: "conjunto cropped e shorts estilo boêmio"
 | Rank | Imagem | Tipo de Peça | Cores | Similaridade |
 |------|--------|--------------|-------|--------------|
-| 1 | img_205 | vestido | bege, preto | 0.6876 |
-| 2 | img_471 | vestido | branco | 0.6871 |
-| 3 | img_157 | vestido | branco | 0.6778 |
+| 1 | ![Conjunto](src/data/images/2015-Summer-style-2-piece-set-women-shorts-and-top-fashion-White-cropped-floral-print-pants.jpg_220x220.jpg) | Conjunto de top cropped e shorts | Branco, vermelho, rosa e azul | 0.7179 |
+| 2 | ![Conjunto](src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg) | Conjunto de duas peças (top e shorts) | Vermelho, Azul | 0.7069 |
+| 3 | ![Conjunto](src/data/images/2015-new-fashion-women-sexy-dresses-with-tassel-sleeveless-backless-twinset-dress-loose-irregular-sundress-above.jpg_220x220_normalized.jpg) | Conjunto de top e shorts | Azul e branco | 0.6964 |
 
-### Consulta: "Conjunto de top e shorts marrom e preto descontraído para uso casual no verão"
+### Consulta: "roupa feminina de verão com estampa geométrica azul e branca"
 | Rank | Imagem | Tipo de Peça | Cores | Similaridade |
 |------|--------|--------------|-------|--------------|
-| 1 | img_390 | Conjunto de top e shorts | Vermelho e branco | 0.7069 |
-| 2 | img_432 | Conjunto de duas peças (top e shorts) | Branco com estampas florais em azul, roxo, verde e rosa | 0.7063 |
-| 3 | img_319 | Conjunto de top cropped e shorts | Branco, vermelho, rosa e azul | 0.7034 |
-
-### Consulta: "Macacão curto azul claro sexy para eventos casuais de primavera/verão"
-| Rank | Imagem | Tipo de Peça | Cores | Similaridade |
-|------|--------|--------------|-------|--------------|
-| 1 | img_238 | macaquinho | azul e branco | 0.7563 |
-| 2 | img_355 | macaquinho | azul celeste | 0.7552 |
-| 3 | img_3 | macaquinho | azul claro | 0.7525 |
+| 1 | ![Vestido](src/data/images/2015-new-arrival-summer-dress-A-line-printed-sleeveless-V-neck-chiffon-lace-cotton-mini-beach.jpg_220x220_normalized.jpg) | vestido | preto, branco, rosa | 0.7001 |
+| 2 | ![Conjunto](src/data/images/2015-new-style-Women-Dresses-element-pattern-short-Sleeve-Mini-Club-Party-Dress-.jpg_220x220_normalized.jpg) | Conjunto de blusa e saia | Branco e azul | 0.6960 |
+| 3 | ![Conjunto](src/data/images/2015-new-summer-fashion-women-two-pieces-set-floral-printed-jumpsuits-Slash-neck-off-the-shoulder.jpg_220x220.jpg) | Conjunto de duas peças (top e shorts) | Vermelho, Azul | 0.6896 |
 
 ## Instalação e Uso Rápido
 
@@ -166,43 +130,36 @@ teste-tecnico-fcamara/
 
 ### Instalação Rápida
 ```bash
-# Clonar o repositório
 git clone <url-do-repositório>
 cd teste-tecnico-fcamara
 
-# Criar e ativar ambiente virtual
 python -m venv venv
-source venv/bin/activate  # Linux/MacOS
-venv\Scripts\activate     # Windows
+source venv/bin/activate
+venv\Scripts\activate
 
-# Instalar dependências
 pip install -r requirements.txt
 
-# Configurar variáveis de ambiente
 cp .env.example .env
-# Edite o arquivo .env com sua chave de API OpenAI
 ```
 
 ### Executando o Sistema
 ```bash
-# Iniciar a API
-python main.py --api
+python main.py index --images-dir /caminho/para/imagens
 
-# Para indexar novas imagens
-python main.py --index --images-dir /caminho/para/imagens
+python main.py search "vestido branco para primavera" --limit 5
 
-# Para executar busca via linha de comando
-python main.py --search "vestido branco para primavera" --limit 5
-
-# Para extrair descrições e gerar consultas de teste
-cd tools/scripts
-python extract_descriptions.py --limit 20
-python generate_queries.py
+python tools/scripts/test_embeddings.py
 ```
 
 ## Visualização Completa de Resultados
 
-Para uma visualização completa e detalhada dos resultados de teste, incluindo gráficos e métricas adicionais, consulte o relatório HTML em `tools/test_results/embedding_test_report.html`
+Para uma visualização completa e detalhada dos resultados de teste, incluindo gráficos e métricas adicionais, consulte o relatório HTML em `tools/results/search_report/search_test_report.html`. Este relatório inclui:
+
+- Métricas gerais (15 consultas processadas, similaridade média de 0.6919)
+- Gráficos de distribuição de similaridade
+- Análise de similaridade por posição no ranking
+- Top 5 consultas com maior similaridade
+- Resultados detalhados por consulta com visualização das imagens
 
 ## Próximos Passos e Melhorias Futuras
 

@@ -31,7 +31,6 @@ class ImageProcessor:
         self.vision_model = os.getenv("VISION_MODEL")
         self.embedding_model = os.getenv("EMBEDDING_MODEL")
         
-        # Inicializa o gerenciador de cache
         self.cache_manager = CacheManager()
     
     def _encode_image(self, image_path: str) -> str:
@@ -74,24 +73,20 @@ class ImageProcessor:
             str: Descrição detalhada da imagem.
         """
         try:
-            # Verificar cache primeiro
             if is_path:
                 cached_description = self.cache_manager.get_cached_description(image_data)
                 if cached_description:
                     logger.info(f"Usando descrição em cache para {image_data}")
                     return cached_description
                     
-            # Codifica a imagem conforme o tipo de entrada
             if is_path:
                 base64_image = self._encode_image(image_data)
             else:
                 base64_image = self._encode_image_from_bytes(image_data)
             
-            # Extrai o nome do arquivo se estiver disponível
             filename = ""
             if is_path:
                 filename = os.path.basename(image_data)
-                # Limpa o nome do arquivo para extrair informações úteis
                 filename = filename.replace('_220x220', '').replace('.jpg', '').replace('-', ' ').replace('_', ' ')
             
             logger.info(f"Gerando descrição para imagem: {os.path.basename(image_data) if is_path else 'bytes'}")
@@ -141,7 +136,6 @@ Seja extremamente detalhado e específico."""},
             description = response.choices[0].message.content
             logger.debug(f"Descrição gerada com sucesso: {description[:50]}...")
             
-            # Salva no cache se for um caminho de arquivo
             if is_path:
                 self.cache_manager.cache_description(image_data, description)
                 
@@ -163,7 +157,6 @@ Seja extremamente detalhado e específico."""},
             List[float]: Vetor de embedding.
         """
         try:
-            # Verificar cache primeiro
             cached_embedding = self.cache_manager.get_cached_embedding(text)
             if cached_embedding:
                 logger.info(f"Usando embedding em cache")
@@ -178,7 +171,6 @@ Seja extremamente detalhado e específico."""},
             
             embedding = response.data[0].embedding
             
-            # Salva no cache
             self.cache_manager.cache_embedding(text, embedding)
             
             return embedding
@@ -204,13 +196,10 @@ Seja extremamente detalhado e específico."""},
             image_id = os.path.basename(image_path)
             
         try:
-            # Gera a descrição da imagem
             description = self.generate_image_description(image_path)
             
-            # Gera o embedding a partir da descrição
             embedding = self.generate_embedding_from_text(description)
             
-            # Extrai metadados básicos da imagem
             with Image.open(image_path) as img:
                 width, height = img.size
                 format_ = img.format

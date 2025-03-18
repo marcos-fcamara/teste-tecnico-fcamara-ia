@@ -12,7 +12,7 @@ class TextProcessor:
     """Classe para processar consultas textuais e convertê-las em embeddings."""
 
     def __init__(self, api_key: Optional[str] = None):
-        print("Inicializando TextProcessor")  # Log de debug
+        print("Inicializando TextProcessor")
         print(f"Método enhance_query existe: {hasattr(self, 'enhance_query')}")
         print(f"Método enhance_query é callable: {callable(getattr(self, 'enhance_query', None))}")
 
@@ -29,9 +29,7 @@ class TextProcessor:
         self.client = OpenAI(api_key=self.api_key)
         self.embedding_model = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
 
-        # Inicializa o gerenciador de cache
         self.cache_manager = CacheManager()
-
 
     def enhance_query(self, query_text: str) -> str:
         """
@@ -85,12 +83,10 @@ class TextProcessor:
                 response_format={"type": "json_object"},
             )
 
-            # Extrair o JSON da resposta
             import json
 
             attributes = json.loads(extraction_response.choices[0].message.content)
 
-            # Estágio 2: Expandir a consulta com base nos atributos
             expansion_response = self.client.chat.completions.create(
                 model="gpt-4",
                 messages=[
@@ -114,7 +110,7 @@ class TextProcessor:
                     {
                         "role": "user",
                         "content": f"""Consulta original: '{query_text}'
-                            
+
             Atributos extraídos:
             {json.dumps(attributes, indent=2, ensure_ascii=False)}
 
@@ -127,10 +123,8 @@ class TextProcessor:
 
             enhanced_query = expansion_response.choices[0].message.content
 
-            # Terceiro estágio: Estruturar a descrição final para aumentar a similaridade
-            # Adicionamos termos de alta relevância e marcações semânticas
             structured_query = f"""Consulta Detalhada de Moda: {enhanced_query}
-                
+
             Principais Atributos:
             - Tipo de Peça: {attributes.get('tipo_peca', 'N/A')}
             - Cores: {', '.join(attributes.get('cores', [])) if isinstance(attributes.get('cores'), list) else attributes.get('cores', 'N/A')}
@@ -147,7 +141,6 @@ class TextProcessor:
 
             logger.debug(f"Consulta aprimorada avançada: '{structured_query[:100]}...'")
 
-            # Salva no cache
             self.cache_manager.cache_query_results(
                 f"enhance_v2_{query_text}", 1, {"enhanced_query": structured_query}
             )
@@ -158,7 +151,6 @@ class TextProcessor:
             logger.warning(
                 f"Erro ao aprimorar consulta avançada: {str(e)}. Usando consulta original."
             )
-            # Fallback para o método original em caso de erro
             try:
                 response = self.client.chat.completions.create(
                     model="gpt-4",
@@ -178,7 +170,6 @@ class TextProcessor:
 
                 return response.choices[0].message.content
             except Exception as e:
-                # Fallback simples
                 logger.warning(f"Erro no enhance_query: {e}. Usando consulta original.")
                 return query_text.strip('"')
 
@@ -186,13 +177,8 @@ class TextProcessor:
     def _preprocess_text(self, text: str) -> str:
         import re
 
-        # Normaliza espaços em branco
         text = re.sub(r"\s+", " ", text.strip())
 
-        # Adiciona delimitadores para termos importantes em moda
-        # Isso ajuda o modelo a dar mais atenção a certas palavras-chave
-
-        # Coloca marcadores em tipos de peças
         tipos_peca = [
             "vestido",
             "camisa",
@@ -209,7 +195,6 @@ class TextProcessor:
                 r"\b(" + tipo + r")\b", r"<TIPO>\1</TIPO>", text, flags=re.IGNORECASE
             )
 
-        # Coloca marcadores em cores
         cores = [
             "vermelho",
             "azul",
@@ -228,7 +213,6 @@ class TextProcessor:
                 r"\b(" + cor + r")\b", r"<COR>\1</COR>", text, flags=re.IGNORECASE
             )
 
-        # Coloca marcadores em estilos
         estilos = [
             "formal",
             "casual",
@@ -244,7 +228,6 @@ class TextProcessor:
                 r"\b(" + estilo + r")\b", r"<ESTILO>\1</ESTILO>", text, flags=re.IGNORECASE
             )
 
-        # Expande abreviações
         abreviacoes = {
             "p/": "para",
             "c/": "com",
@@ -264,49 +247,37 @@ class TextProcessor:
     @cached_embedding(CacheManager())
     def generate_embedding(self, text: str, use_ensemble: bool = True, force_local: bool = False) -> List[float]:
         try:
-            # Verificar cache primeiro
             embedding_key = f"{text}_ensemble" if use_ensemble else text
             cached_embedding = self.cache_manager.get_cached_embedding(embedding_key)
             if cached_embedding:
                 logger.info(f"Usando embedding em cache")
                 return cached_embedding
-                
-            # Se forçar uso local e não tiver no cache, retorne None ou um embedding vazio
+
             if force_local:
                 logger.info(f"Modo force_local ativado, mas embedding não encontrado no cache")
                 return None
-                
+
             logger.info(f"Gerando embedding avançado para texto")
 
             if use_ensemble:
-                # Ensemble de técnicas para melhorar a qualidade do embedding
-
-                # 1. Pré-processamento do texto
                 processed_text = self._preprocess_text(text)
 
-                # 2. Gerar embedding para diferentes variações do texto
-                # Isso ajuda a capturar diferentes aspectos semânticos
                 embeddings = []
 
-                # Embedding base (texto original)
                 response = self.client.embeddings.create(
                     model=self.embedding_model, input=text
                 )
                 base_embedding = response.data[0].embedding
                 embeddings.append(base_embedding)
 
-                # Embedding do texto pré-processado (com marcações e expansões)
                 response = self.client.embeddings.create(
                     model=self.embedding_model, input=processed_text
                 )
                 proc_embedding = response.data[0].embedding
                 embeddings.append(proc_embedding)
 
-                # Embedding de uma versão estruturada (para consultas mais estruturadas)
-                # Extrair palavras-chave e criar uma versão estruturada
                 import re
 
-                # Extrai possíveis atributos baseados em padrões comuns
                 tipos = re.findall(
                     r"\b(vestido|camisa|calça|casaco|jaqueta|saia|blusa|terno|camiseta)\b",
                     text,
@@ -342,15 +313,11 @@ class TextProcessor:
                 struct_embedding = response.data[0].embedding
                 embeddings.append(struct_embedding)
 
-                # 3. Combinar os embeddings (média ponderada)
-                # Damos peso maior para o embedding base e estruturado
-                weights = [0.5, 0.2, 0.3]  # Base, processado, estruturado
+                weights = [0.5, 0.2, 0.3]
 
-                # Normaliza os pesos
                 total_weight = sum(weights)
                 weights = [w / total_weight for w in weights]
 
-                # Combina os embeddings
                 combined_embedding = []
                 for i in range(len(base_embedding)):
                     weighted_sum = sum(
@@ -359,7 +326,6 @@ class TextProcessor:
                     )
                     combined_embedding.append(weighted_sum)
 
-                # 4. Normaliza o embedding final (L2)
                 import numpy as np
 
                 norm = np.linalg.norm(combined_embedding)
@@ -368,19 +334,16 @@ class TextProcessor:
                 else:
                     final_embedding = combined_embedding
 
-                # Salva no cache
                 self.cache_manager.cache_embedding(embedding_key, final_embedding)
 
                 return final_embedding
             else:
-                # Método simples (sem ensemble)
                 response = self.client.embeddings.create(
                     model=self.embedding_model, input=text
                 )
 
                 embedding = response.data[0].embedding
 
-                # Salva no cache
                 self.cache_manager.cache_embedding(embedding_key, embedding)
 
                 return embedding

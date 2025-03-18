@@ -20,14 +20,11 @@ import glob
 import shutil
 from datetime import datetime
 
-# Adicionar diretório raiz ao path do Python
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..')))
 os.environ["CHROMA_PERSIST_DIRECTORY"] = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../chroma_db'))
 
-# Diretório de saída padrão
 output_dir = "../results/search_report"
 
-# Tentar importar módulos com tratamento de erro explícito
 try:
     from src.processing.indexer import ImageIndexer
     from src.processing.image_processor import ImageProcessor
@@ -38,17 +35,14 @@ except ImportError as e:
     print("Verifique se o diretório raiz do projeto está no PYTHONPATH")
     sys.exit(1)
 
-# Carregar variáveis de ambiente
 load_dotenv()
 
-# Configurar logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
-# Lista de consultas de teste padrão
 DEFAULT_TEST_QUERIES = [
     "Vestido boho estampado: Vestido curto, solto, estampado em azul e verde, mangas três quartos, decote V, estilo praiano.",
     "Vestido preto de renda: Vestido elegante, preto, solto, mangas transparentes de renda com bolinhas, gola dobrável."
@@ -76,27 +70,22 @@ def load_test_queries(queries_file: str = None) -> List[str]:
         return DEFAULT_TEST_QUERIES
     
     try:
-        # Tentar com o caminho fornecido
         if os.path.exists(queries_file):
             logger.info(f"Carregando consultas de: {queries_file}")
             with open(queries_file, 'r', encoding='utf-8') as f:
                 queries = [line.strip() for line in f if line.strip()]
-                # Remover numeração se presente (ex: "1. query" -> "query")
                 queries = [re.sub(r'^\d+\.\s+', '', q) for q in queries]
             return queries
         
-        # Tentar com caminho absoluto alternativo
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
         alt_path = os.path.join(base_dir, 'src', 'data', 'input', 'test_queries.txt')
         if os.path.exists(alt_path):
             logger.info(f"Carregando consultas de caminho alternativo: {alt_path}")
             with open(alt_path, 'r', encoding='utf-8') as f:
                 queries = [line.strip() for line in f if line.strip()]
-                # Remover numeração se presente
                 queries = [re.sub(r'^\d+\.\s+', '', q) for q in queries]
             return queries
         
-        # Se não encontrar, usar consultas padrão
         logger.warning(f"Arquivo de consultas não encontrado: {queries_file}")
         logger.info("Usando consultas padrão")
         return DEFAULT_TEST_QUERIES
@@ -111,16 +100,13 @@ def run_search_tests(queries: List[str], top_k: int = 3, output_dir: str = "../r
         logger.error("Nenhuma consulta para testar.")
         return
     
-    # Normalizar e criar o diretório de saída
     output_dir = os.path.abspath(output_dir)
     os.makedirs(output_dir, exist_ok=True)
     logger.info(f"Diretório de saída: {output_dir}")
     
-    # Criar diretório para imagens no relatório
     images_report_dir = os.path.join(output_dir, "images")
     os.makedirs(images_report_dir, exist_ok=True)
     
-    # Configurar os componentes
     vector_db = VectorDatabase()
     image_processor = ImageProcessor()
     
@@ -129,11 +115,9 @@ def run_search_tests(queries: List[str], top_k: int = 3, output_dir: str = "../r
         vector_db=vector_db
     )
     
-    # Verificar se o modo de reuso está ativado
     if reuse_embeddings:
         logger.info("Modo reuse_embeddings ativado! Usando apenas embeddings em cache.")
     
-    # Verificar o banco de dados
     db_info = vector_db.get_collection_info()
     if db_info["item_count"] == 0:
         logger.error("O banco de dados está vazio. Execute a indexação primeiro.")
@@ -141,10 +125,8 @@ def run_search_tests(queries: List[str], top_k: int = 3, output_dir: str = "../r
     
     logger.info(f"Banco de dados contém {db_info['item_count']} itens indexados.")
     
-    # Lista para armazenar todos os resultados
     results_data = []
     
-    # Testar cada consulta
     for query in tqdm(queries, desc="Testando consultas"):
         logger.info(f"Testando consulta: '{query}'")
         
@@ -162,7 +144,6 @@ def run_search_tests(queries: List[str], top_k: int = 3, output_dir: str = "../r
             raw_results = search_results["results"]
             
             for i in range(len(raw_results["ids"][0])):
-                # Extrair dados do resultado
                 image_id = raw_results["ids"][0][i]
                 distance = raw_results["distances"][0][i]
                 similarity = 1 - distance
@@ -170,18 +151,14 @@ def run_search_tests(queries: List[str], top_k: int = 3, output_dir: str = "../r
                 metadata = raw_results["metadatas"][0][i] if raw_results["metadatas"] else {}
                 document = raw_results["documents"][0][i] if raw_results["documents"] else ""
                 
-                # Extrair informações usando regex - abordagem robusta
                 tipo_peca = "N/A"
                 cores = "N/A"
                 image_path = "N/A"
                 
-                # Obter caminho da imagem
                 if metadata and "path" in metadata:
                     image_path = metadata["path"]
-                    # Extrair filename
                     filename = os.path.basename(image_path)
                 else:
-                    # Tentar extrair do documento
                     image_path_match = re.search(r'"path"\s*:\s*"([^"]+)"', document) or re.search(r'"filename"\s*:\s*"([^"]+)"', document)
                     if image_path_match:
                         image_path = image_path_match.group(1)
@@ -189,12 +166,10 @@ def run_search_tests(queries: List[str], top_k: int = 3, output_dir: str = "../r
                     else:
                         filename = f"imagem_{image_id}.jpg"
                 
-                # Extrair tipo de peça
                 tipo_peca_match = re.search(r'"tipo_de_peca"\s*:\s*"([^"]+)"', document) or re.search(r'"tipo_peca"\s*:\s*"([^"]+)"', document)
                 if tipo_peca_match:
                     tipo_peca = tipo_peca_match.group(1)
                 
-                # Extrair cores - pode ser lista ou string
                 cores_match = re.search(r'"cores_predominantes"\s*:\s*(\[[^\]]+\])', document) or re.search(r'"cores"\s*:\s*(\[[^\]]+\])', document)
                 if cores_match:
                     try:
@@ -205,13 +180,11 @@ def run_search_tests(queries: List[str], top_k: int = 3, output_dir: str = "../r
                         cores_text = cores_match.group(1).strip('[]').replace('"', '')
                         cores = cores_text
                 
-                # Se ainda não tiver cores, procurar por versão string
                 if cores == "N/A":
                     cores_str_match = re.search(r'"cores_predominantes"\s*:\s*"([^"]+)"', document) or re.search(r'"cores"\s*:\s*"([^"]+)"', document)
                     if cores_str_match:
                         cores = cores_str_match.group(1)
                 
-                # Adicionar aos resultados
                 results_data.append({
                     "query": query,
                     "rank": i + 1,
@@ -228,19 +201,58 @@ def run_search_tests(queries: List[str], top_k: int = 3, output_dir: str = "../r
             logger.error(f"Erro ao processar consulta '{query}': {str(e)}")
             continue
     
-    # Converter para DataFrame
     df = pd.DataFrame(results_data)
     
-    if df.empty:
-        logger.error("Nenhum resultado encontrado para as consultas testadas.")
-        return
-    
-    # Salvar resultados em CSV
+    if not df.empty:
+        filtered_results = []
+        
+        for query in df['query'].unique():
+            query_df = df[df['query'] == query].copy()
+            
+            query_df['basename_sem_normalized'] = query_df['filename'].apply(
+                lambda x: x.replace('_normalized.jpg', '.jpg')
+            )
+            
+            duplicated_bases = []
+            for basename in query_df['basename_sem_normalized'].unique():
+                matches = query_df[query_df['basename_sem_normalized'] == basename]
+                if len(matches) > 1:
+                    duplicated_bases.append(basename)
+            
+            for basename in duplicated_bases:
+                matches = query_df[query_df['basename_sem_normalized'] == basename]
+                
+                normalized_exists = any(matches['filename'].str.endswith('_normalized.jpg'))
+                
+                if normalized_exists:
+                    normalized_matches = matches[matches['filename'].str.endswith('_normalized.jpg')]
+                    best_normalized_idx = normalized_matches['similarity'].idxmax()
+                    
+                    for idx in matches.index:
+                        if idx != best_normalized_idx:
+                            query_df.loc[idx, 'to_remove'] = True
+                else:
+                    best_original_idx = matches['similarity'].idxmax()
+                    for idx in matches.index:
+                        if idx != best_original_idx:
+                            query_df.loc[idx, 'to_remove'] = True
+            
+            if 'to_remove' in query_df.columns:
+                filtered_query_df = query_df[~query_df['to_remove'].fillna(False)]
+            else:
+                filtered_query_df = query_df
+            
+            filtered_query_df = filtered_query_df.sort_values('rank')
+            
+            filtered_results.append(filtered_query_df.drop(['basename_sem_normalized', 'to_remove'], axis=1, errors='ignore'))
+        
+        df = pd.concat(filtered_results).reset_index(drop=True)
+        
+        logger.info(f"Filtro aplicado: mantidas {len(df)} imagens, priorizando versões normalizadas")
     output_csv = os.path.join(output_dir, "search_test_results.csv")
     df.to_csv(output_csv, index=False, encoding='utf-8')
     logger.info(f"Resultados salvos em {output_csv}")
     
-    # Gerar relatório tabular com tabulate
     headers = ["Consulta", "Rank", "Imagem", "Similaridade", "Tipo de Peça", "Cores"]
     tabular_data = df[["query", "rank", "filename", "similarity", "tipo_peca", "cores"]].values.tolist()
     
@@ -251,7 +263,6 @@ def run_search_tests(queries: List[str], top_k: int = 3, output_dir: str = "../r
     
     logger.info(f"Relatório tabular salvo em {output_txt}")
     
-    # Gerar relatório HTML com visualizações
     generate_search_report(df, output_dir)
     
     return df
@@ -262,27 +273,20 @@ def generate_search_report(results_df: pd.DataFrame, output_dir: str):
         logger.error("Sem dados para gerar relatório.")
         return
     
-    # Extrair métricas gerais
     num_queries = results_df['query'].nunique()
     avg_similarity = results_df['similarity'].mean()
     
-    # Calcular estatísticas por rank
     rank_similarity = results_df.groupby('rank')['similarity'].agg(['mean', 'min', 'max']).reset_index()
     
-    # Caminho para o relatório HTML
     report_html = os.path.join(output_dir, "search_test_report.html")
     
-    # Criar diretório para imagens no relatório
     images_report_dir = os.path.join(output_dir, "images")
     os.makedirs(images_report_dir, exist_ok=True)
     
-    # Copiar todas as imagens para o diretório do relatório
-    # Copiar todas as imagens para o diretório do relatório
     for _, row in results_df.iterrows():
-        # Lista de possíveis localizações para procurar a imagem
         img_basename = os.path.basename(row['image_path'])
         possible_paths = [
-            row['image_path'],  # Caminho original do metadata
+            row['image_path'],
             os.path.join('/home/azureuser/fashion-similarity-search/teste-tecnico-fcamara/src/data/images', img_basename),
             os.path.join(os.path.abspath('../../src/data/images'), img_basename),
             os.path.join(os.path.abspath('../../../src/data/images'), img_basename),
@@ -290,7 +294,6 @@ def generate_search_report(results_df: pd.DataFrame, output_dir: str):
             os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../src/data/images', img_basename)
         ]
         
-        # Verificar cada caminho possível
         found = False
         for path in possible_paths:
             if os.path.exists(path):
@@ -299,58 +302,48 @@ def generate_search_report(results_df: pd.DataFrame, output_dir: str):
                     shutil.copy2(path, dest_path)
                     logger.info(f"Imagem copiada: {path} -> {dest_path}")
                     found = True
-                    break  # Encontrou e copiou, não precisa continuar procurando
+                    break
                 except Exception as e:
                     logger.error(f"Erro ao copiar {path}: {e}")
         
-        # Se não encontrou a imagem em nenhum caminho possível, cria um placeholder
         if not found:
             logger.warning(f"Imagem não encontrada em nenhum caminho possível: {img_basename}")
             try:
                 from PIL import Image, ImageDraw
                 
-                # Cria uma imagem placeholder
                 placeholder = Image.new('RGB', (220, 220), color=(240, 240, 240))
                 draw = ImageDraw.Draw(placeholder)
                 
-                # Adiciona texto informativo
                 text = f"Imagem não encontrada"
                 draw.text((30, 100), text, fill=(0, 0, 0))
                 draw.text((30, 120), img_basename[:20], fill=(0, 0, 0))
                 
-                # Salva o placeholder no diretório de imagens
                 dest_path = os.path.join(images_report_dir, img_basename)
                 placeholder.save(dest_path)
                 logger.info(f"Placeholder criado para: {img_basename}")
             except Exception as e:
                 logger.error(f"Erro ao criar placeholder: {str(e)}")
     
-    # Preparar dados para o relatório por consulta
     query_results = []
     for query in results_df['query'].unique():
         query_df = results_df[results_df['query'] == query].sort_values('rank')
         
-        # Criar coluna de imagem HTML
         image_html = []
         for _, row in query_df.iterrows():
             img_basename = os.path.basename(row['image_path'])
-            # Verificar se a imagem existe no diretório do relatório
             img_report_path = os.path.join(images_report_dir, img_basename)
             if os.path.exists(img_report_path):
                 img_tag = f'<img src="images/{img_basename}" alt="{row["tipo_peca"]}" width="150">'
             else:
-                # Se não existe, usar um placeholder HTML
                 img_tag = f'''<div style="width:150px;height:150px;background:#f0f0f0;display:flex;
                 align-items:center;justify-content:center;margin:0 auto;border:1px solid #ddd;">
                 <div style="text-align:center;font-size:12px;padding:5px;">
                 Imagem não encontrada<br/>{img_basename[:15]}...</div></div>'''
             image_html.append(img_tag)
         
-        # Adicionar coluna de imagem HTML
         temp_df = query_df.copy()
         temp_df['imagem'] = image_html
         
-        # Gerar tabela HTML
         query_table = temp_df[['rank', 'imagem', 'similarity', 'tipo_peca', 'cores']].to_html(
             index=False,
             escape=False,
@@ -363,8 +356,6 @@ def generate_search_report(results_df: pd.DataFrame, output_dir: str):
             "results_table": query_table
         })
     
-    # Gerar gráficos
-    # 1. Distribuição de similaridade
     plt.figure(figsize=(10, 6))
     plt.hist(results_df['similarity'], bins=20, color='skyblue', edgecolor='black')
     plt.title('Distribuição de Similaridade')
@@ -373,7 +364,6 @@ def generate_search_report(results_df: pd.DataFrame, output_dir: str):
     plt.grid(alpha=0.3)
     plt.savefig(os.path.join(output_dir, "similarity_distribution.png"))
     
-    # 2. Similaridade média por rank
     plt.figure(figsize=(10, 6))
     ranks = rank_similarity['rank'].values
     means = rank_similarity['mean'].values
@@ -385,7 +375,6 @@ def generate_search_report(results_df: pd.DataFrame, output_dir: str):
     plt.grid(axis='y', alpha=0.3)
     plt.savefig(os.path.join(output_dir, "rank_similarity.png"))
     
-    # 3. Top 5 consultas com maior similaridade média
     top_queries = results_df.groupby('query')['similarity'].mean().nlargest(5).reset_index()
     plt.figure(figsize=(12, 6))
     plt.barh(top_queries['query'], top_queries['similarity'], color='teal', alpha=0.7)
@@ -396,7 +385,6 @@ def generate_search_report(results_df: pd.DataFrame, output_dir: str):
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, "top_queries.png"))
     
-    # Criar HTML com todos os elementos
     html_content = f"""
     <!DOCTYPE html>
     <html>
@@ -484,17 +472,14 @@ def main():
     
     args = parser.parse_args()
     
-    # Verificar API key
     if not os.getenv("OPENAI_API_KEY"):
         logger.error("API key da OpenAI não configurada. Configure a variável de ambiente OPENAI_API_KEY.")
         sys.exit(1)
     
-    # Carregar consultas
     queries = load_test_queries(args.queries)
     
     logger.info(f"Carregadas {len(queries)} consultas de teste")
     
-    # Executar testes
     run_search_tests(
         queries=queries, 
         top_k=args.top_k, 

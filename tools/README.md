@@ -1,4 +1,4 @@
-# Fashion Image Search Testing Suite - A Comprehensive Testing Framework for Fashion E-commerce Search Systems
+# Fashion Image Search Testing Suite - fCamara Techinal Test - A Comprehensive Testing Framework for Fashion E-commerce Search Systems
 
 This project provides a robust testing framework for evaluating and validating fashion image search systems. It combines text-based queries, image embeddings, and similarity testing to ensure accurate and relevant search results in fashion e-commerce applications.
 
@@ -41,19 +41,15 @@ teste-tecnico-fcamara/
 
 ### Installation
 ```bash
-# Clone the repository
 git clone <repository-url>
 cd teste-tecnico-fcamara
 
-# Create and activate virtual environment
 python -m venv venv
-source venv/bin/activate  # Linux/MacOS
-venv\Scripts\activate     # Windows
+source venv/bin/activate
+venv\Scripts\activate
 
-# Install dependencies
 pip install pandas numpy matplotlib tabulate openai tqdm python-dotenv
 
-# Set up environment variables
 echo "OPENAI_API_KEY=your-api-key-here" > .env
 ```
 
@@ -72,7 +68,6 @@ python test_embeddings.py
 
 3. View results:
 ```bash
-# Open the embedding test report
 open ../results/embeddings/embedding_test_report.html
 ```
 
@@ -84,7 +79,6 @@ from scripts.generate_test_queries import QueryGenerator
 generator = QueryGenerator()
 df = pd.read_csv("data/input/test_descriptions.csv")
 
-# Generate occasion-specific queries
 occasion_queries = generator.generate_specialized_queries(
     df, 
     num_queries=5, 

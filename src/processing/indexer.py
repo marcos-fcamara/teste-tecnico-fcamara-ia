@@ -4,6 +4,9 @@ import time
 from typing import Dict, List, Any, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
+import re
+import json
+import numpy as np
 
 from src.database.vector_db import VectorDatabase
 from src.processing.image_processor import ImageProcessor
@@ -66,15 +69,11 @@ class ImageIndexer:
         Returns:
             str: Consulta aprimorada
         """
-        # Implementação básica de aprimoramento de consulta
-        # Você pode expandir esta lógica conforme necessário
-        
-        # Remove stopwords
+
         stopwords = {'de', 'para', 'com', 'e', 'o', 'a', 'os', 'as'}
         palavras = query.lower().split()
         palavras_filtradas = [p for p in palavras if p not in stopwords]
         
-        # Adiciona sinônimos ou variações
         sinonimos = {
             'roupa': ['vestimenta', 'traje'],
             'feminina': ['feminino', 'mulher'],
@@ -85,10 +84,8 @@ class ImageIndexer:
         aprimored_search = []
         for palavra in palavras_filtradas:
             aprimored_search.append(palavra)
-            # Adiciona sinônimos, se existirem
             aprimored_search.extend(sinonimos.get(palavra, []))
         
-        # Retorna a consulta com termos expandidos
         return ' '.join(aprimored_search)
 
     def _find_images(self, directory: str) -> List[str]:
@@ -123,34 +120,28 @@ class ImageIndexer:
         Returns:
             bool: True se a operação foi bem-sucedida.
         """
-        # Verifica se o diretório existe
         if not os.path.isdir(directory):
             logger.error(f"Diretório não encontrado: {directory}")
             return False
 
-        # Remove o índice existente, se solicitado
         if rebuild_index:
             logger.info("Removendo índice existente...")
             self.vector_db.delete_collection()
 
-            # Limpa também o cache
             logger.info("Limpando cache...")
             self.cache_manager.clear_cache()
 
-            time.sleep(1)  # Pequena pausa para garantir que a remoção seja concluída
+            time.sleep(1) 
 
-        # Encontra as imagens
         image_paths = self._find_images(directory)
 
         if not image_paths:
             logger.warning(f"Nenhuma imagem encontrada em {directory}")
             return False
 
-        # Processa as imagens em lotes
         processed_count = 0
         batch_count = 0
 
-        # Divide as imagens em lotes
         for i in range(0, len(image_paths), self.batch_size):
             batch_paths = image_paths[i : i + self.batch_size]
             batch_count += 1
@@ -159,17 +150,14 @@ class ImageIndexer:
                 f"Processando lote {batch_count}/{(len(image_paths) + self.batch_size - 1) // self.batch_size}..."
             )
 
-            # Processa as imagens do lote em paralelo
             processed_batch = []
 
             with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-                # Submete tarefas para o executor
                 future_to_path = {
                     executor.submit(self._process_image, path, f"img_{i + idx}"): path
                     for idx, path in enumerate(batch_paths, 1)
                 }
 
-                # Coleta os resultados
                 for future in as_completed(future_to_path):
                     path = future_to_path[future]
                     try:
@@ -179,15 +167,12 @@ class ImageIndexer:
                     except Exception as e:
                         logger.error(f"Falha ao processar {path}: {str(e)}")
 
-            # Adiciona os resultados ao banco vetorial
             if processed_batch:
-                # Prepara os dados para inserção
                 ids = [item["id"] for item in processed_batch]
                 embeddings = [item["embedding"] for item in processed_batch]
                 documents = [item["description"] for item in processed_batch]
                 metadatas = [item["metadata"] for item in processed_batch]
 
-                # Adiciona ao banco vetorial
                 success = self.vector_db.add_items(
                     ids=ids,
                     embeddings=embeddings,
@@ -205,14 +190,12 @@ class ImageIndexer:
                         f"Falha ao adicionar lote {batch_count} ao banco vetorial."
                     )
 
-            # Pequena pausa entre lotes
             if (
                 batch_count
                 < (len(image_paths) + self.batch_size - 1) // self.batch_size
             ):
                 time.sleep(1)
 
-        # Exibe estatísticas do cache
         cache_stats = self.cache_manager.get_cache_stats()
         logger.info(f"Estatísticas do cache: {cache_stats}")
 
@@ -243,9 +226,7 @@ class ImageIndexer:
             logger.info(f"Limite de resultados: {limit}")
             logger.info(f"Modo reuse_embeddings: {reuse_embeddings}")
             
-            # Tenta usar o método enhance_query do TextProcessor
             if reuse_embeddings:
-                # Se estamos reutilizando embeddings, verifica o cache primeiro
                 cached_query = self.cache_manager.get_cached_query_results(
                     f"enhance_v2_{query_text}", 1
                 )
@@ -253,17 +234,14 @@ class ImageIndexer:
                     logger.info(f"Usando consulta aprimorada em cache")
                     enhanced_query = cached_query.get("enhanced_query", query_text)
                 else:
-                    # Se não encontrar no cache e estiver no modo reuse, use a consulta original
                     logger.info(f"Consulta não encontrada no cache e modo reuse ativado. Usando consulta original.")
                     enhanced_query = query_text
             else:
-                # Modo normal, faz chamada à API se necessário
                 if callable(getattr(self.text_processor, 'enhance_query', None)):
                     enhanced_query = self.text_processor.enhance_query(query_text)
                 else:
                     enhanced_query = self.enhance_query(query_text)
             
-            # Verificar cache para a consulta completa
             cache_key = f"high_quality_{query_text}" if high_quality else query_text
             cached_results = self.cache_manager.get_cached_query_results(
                 cache_key, limit
@@ -272,22 +250,19 @@ class ImageIndexer:
                 logger.info(f"Usando resultados em cache para consulta: '{query_text}'")
                 return cached_results
 
-            # Processo de busca avançada
             if high_quality:
-                # Gera embedding com flag force_local se reuse_embeddings=True
                 query_embedding = self.text_processor.generate_embedding(
                     enhanced_query, 
                     use_ensemble=True,
                     force_local=reuse_embeddings
                 )
                 
-                # Se estamos no modo reuse e não encontrou embedding, retornar erro
                 if reuse_embeddings and query_embedding is None:
                     logger.warning(f"Modo reuse_embeddings ativado, mas embedding não encontrado no cache")
                     query_embedding = self.text_processor.generate_embedding(
                         enhanced_query, 
                         use_ensemble=True,
-                        force_local=False  # Permite calcular novo embedding
+                        force_local=False
                     )
 
                     return {
@@ -296,42 +271,32 @@ class ImageIndexer:
 
                 logger.info(f"Processando consulta avançada: '{query_text}'")
 
-                # Extrai características da consulta para ponderação
-                import re
 
-                # Configuração de pesos para características específicas
                 feature_weights = {
-                    "tipo_peca": 2.0,  # Tipo de peça tem peso mais alto
-                    "cor": 1.5,  # Cor tem peso médio-alto
-                    "padrao": 1.2,  # Padrão/estampa tem peso médio
-                    "estilo": 1.8,  # Estilo tem peso alto
-                    "ocasiao": 1.5,  # Ocasião de uso tem peso médio-alto
-                    "genero": 1.3,  # Gênero tem peso médio
-                    "estacao": 1.0,  # Estação tem peso normal
-                    "material": 1.0,  # Material tem peso normal
+                    "tipo_peca": 2.0,
+                    "cor": 1.5,
+                    "padrao": 1.2,
+                    "estilo": 1.8, 
+                    "ocasiao": 1.5,
+                    "genero": 1.3,
+                    "estacao": 1.0,
+                    "material": 1.0,
                 }
 
-                # Processo de busca avançada bi-direcional
                 if high_quality:
-                    # 1. Aprimora a consulta
                     enhanced_query = self.text_processor.enhance_query(query_text)
 
-                    # 2. Gera embedding de alta qualidade (ensemble)
                     query_embedding = self.text_processor.generate_embedding(
                         enhanced_query, use_ensemble=True
                     )
 
-                    # 3. Busca com ponderação de características
                     initial_results = self.vector_db.query(
                         query_embedding=query_embedding,
                         limit=limit,
                         feature_weights=feature_weights,
                     )
 
-                    # 4. Para similaridade extremamente alta (95%+), fazemos bidirecional matching
-                    # Isso significa comparar também a consulta com as descrições encontradas
                     if len(initial_results["ids"][0]) > 0:
-                        # Cria uma cópia dos resultados iniciais
                         final_results = {
                             "ids": initial_results["ids"].copy(),
                             "documents": initial_results["documents"].copy(),
@@ -339,29 +304,17 @@ class ImageIndexer:
                             "distances": initial_results["distances"].copy(),
                         }
 
-                        # Para cada resultado, verifica a similaridade no sentido inverso
-                        # (da descrição para a consulta)
                         for i in range(len(initial_results["ids"][0])):
                             try:
-                                # Obtém a descrição do resultado
                                 doc = initial_results["documents"][0][i]
 
-                                # Calcula o embedding da descrição
-                                # Usa apenas partes relevantes da descrição para não sobrecarregar
-                                # Extrai 500 caracteres mais relevantes
-                                import json
-                                import re
-
-                                # Tenta extrair partes estruturadas (JSON) da descrição
                                 json_match = re.search(r"\{.*\}", doc, re.DOTALL)
 
                                 if json_match:
                                     try:
-                                        # Se encontrou JSON, usa campos relevantes
                                         json_data = json.loads(json_match.group(0))
                                         relevant_parts = []
 
-                                        # Coleta campos importantes
                                         for field in [
                                             "tipo_peca",
                                             "cores_predominantes",
@@ -385,30 +338,21 @@ class ImageIndexer:
 
                                         relevant_text = " ".join(relevant_parts)
                                     except:
-                                        # Se falhar ao extrair JSON, usa um trecho do documento
                                         relevant_text = doc[:500]
                                 else:
-                                    # Se não encontrou JSON, usa um trecho do documento
                                     relevant_text = doc[:500]
 
-                                # Compara a consulta com a descrição (no sentido inverso)
-                                # Isso mede quanto a consulta está contida na descrição
                                 similarity_to_query = self._calculate_similarity(
                                     enhanced_query, relevant_text
                                 )
 
-                                # Distância original (quanto menor, mais similar)
                                 original_distance = initial_results["distances"][0][i]
 
-                                # Combina as duas métricas (bidirecional)
-                                # A fórmula equilibra quanto a consulta está na descrição e vice-versa
-                                # Damos peso maior para a direção original (75%)
                                 bidirectional_distance = (
                                     original_distance * 0.75
                                     + (1 - similarity_to_query) * 0.25
                                 )
 
-                                # Atualiza a distância com o valor combinado
                                 final_results["distances"][0][i] = bidirectional_distance
 
                             except Exception as e:
@@ -416,29 +360,22 @@ class ImageIndexer:
                                     f"Erro ao processar similaridade bidirecional: {str(e)}"
                                 )
 
-                        # Reordena os resultados com base nas novas distâncias
-                        # Crimos uma lista de tuplas (índice, distância)
                         items = [
                             (i, final_results["distances"][0][i])
                             for i in range(len(final_results["distances"][0]))
                         ]
 
-                        # Ordena pela distância (menor primeiro)
                         items.sort(key=lambda x: x[1])
 
-                        # Reordena todos os arrays de resultado
                         for key in ["ids", "documents", "metadatas", "distances"]:
                             final_results[key] = [
                                 [final_results[key][0][item[0]] for item in items[:limit]]
                             ]
 
-                        # Amplia similaridade para resultados de alta qualidade
-                        # Isso ajusta as distâncias para que bons resultados fiquem mais próximos de 1.0
                         for i in range(len(final_results["distances"][0])):
                             distance = final_results["distances"][0][i]
                             similarity = 1 - distance
 
-                            # Para similaridades já altas, amplificamos para aproximar de 95%+
                             if similarity > 0.85:
                                 amplified_similarity = (
                                     similarity + (0.98 - similarity) * 0.8
@@ -451,7 +388,6 @@ class ImageIndexer:
                             "results": final_results,
                         }
                     else:
-                        # Se não encontrou resultados, retorna os resultados iniciais
                         result_data = {
                             "query": query_text,
                             "enhanced_query": enhanced_query,
@@ -459,9 +395,7 @@ class ImageIndexer:
                         }
                 
             else:
-                # Busca padrão, ajustada para o modo reuse
                 if reuse_embeddings:
-                    # Tenta obter embedding diretamente do cache
                     query_embedding = self.text_processor.generate_embedding(
                         enhanced_query, 
                         use_ensemble=False,
@@ -479,7 +413,6 @@ class ImageIndexer:
                         "enhanced_query": enhanced_query
                     }
                 else:
-                    # Modo normal
                     query_data = self.text_processor.process_query(query_text, enhance=True)
                     
                 results = self.vector_db.query(
@@ -492,7 +425,6 @@ class ImageIndexer:
                     "results": results,
                 }
 
-            # Salva no cache
             self.cache_manager.cache_query_results(cache_key, limit, result_data)
 
             return result_data
@@ -513,7 +445,6 @@ class ImageIndexer:
             float: Valor de similaridade (0-1).
         """
         try:
-            # Gera embeddings para os textos
             embedding1 = self.text_processor.generate_embedding(
                 text1, use_ensemble=False
             )
@@ -521,10 +452,7 @@ class ImageIndexer:
                 text2, use_ensemble=False
             )
 
-            # Calcula a similaridade coseno
-            import numpy as np
 
-            # Normaliza os embeddings
             norm1 = np.linalg.norm(embedding1)
             norm2 = np.linalg.norm(embedding2)
 
@@ -532,10 +460,8 @@ class ImageIndexer:
                 embedding1 = [e / norm1 for e in embedding1]
                 embedding2 = [e / norm2 for e in embedding2]
 
-            # Produto escalar
             dot_product = sum(a * b for a, b in zip(embedding1, embedding2))
 
-            # Retorna a similaridade (1 = idênticos, 0 = completamente diferentes)
             return max(0.0, min(1.0, dot_product))
 
         except Exception as e:
