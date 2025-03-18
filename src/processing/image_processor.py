@@ -8,12 +8,15 @@ import numpy as np
 from PIL import Image
 import io
 
+from src.processing.image_normalizer import ImageNormalizer
+
 logger = logging.getLogger(__name__)
 
 class ImageProcessor:
     def __init__(self, 
                  api_key: Optional[str] = None, 
-                 model: Optional[str] = None):
+                 model: Optional[str] = None,
+                 normalize_images: bool = True):
         
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         if not self.api_key:
@@ -21,6 +24,15 @@ class ImageProcessor:
             
         self.client = OpenAI(api_key=self.api_key)
         self.model = model or os.getenv("VISION_MODEL")
+        
+        self.normalize_images = normalize_images
+        if normalize_images:
+            self.normalizer = ImageNormalizer(
+                target_size=(512, 512),
+                enhance_contrast=True,
+                sharpen=True,
+                normalize_lighting=True
+            )
         
     def encode_image(self, image_path: str) -> str:
         """Codifica uma imagem em base64 para envio à API."""
@@ -37,7 +49,19 @@ class ImageProcessor:
             raise FileNotFoundError(f"Imagem não encontrada: {image_path}")
             
         try:
-            with Image.open(image_path) as img:
+            if self.normalize_images:
+                try:
+                    normalized_path = self.normalizer.normalize_image(image_path)
+                    
+                    processing_path = normalized_path
+                    logger.info(f"Usando imagem normalizada: {normalized_path}")
+                except Exception as e:
+                    logger.warning(f"Falha ao normalizar imagem {image_path}: {str(e)}")
+                    processing_path = image_path
+            else:
+                processing_path = image_path
+            
+            with Image.open(processing_path) as img:
                 max_size = 1024
                 if max(img.size) > max_size:
                     ratio = max_size / max(img.size)
@@ -49,7 +73,7 @@ class ImageProcessor:
                 
                 buffer = io.BytesIO()
                 img = img.convert('RGB')
-                img.save(buffer, format="JPEG", quality=85)
+                img.save(buffer, format="JPEG", quality=90)
                 base64_image = base64.b64encode(buffer.getvalue()).decode('utf-8')
         
             prompt = """
@@ -106,7 +130,7 @@ class ImageProcessor:
         """Obtém embedding de um texto usando a API de embeddings da OpenAI."""
         try:
             response = self.client.embeddings.create(
-                model=os.getenv("EMBEDDING_MODEL"),
+                model=os.getenv("EMBEDDING_MODEL", "text-embedding-3-small"),
                 input=text
             )
             return response.data[0].embedding

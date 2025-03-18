@@ -5,8 +5,8 @@ from typing import Dict, List, Any, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 
-from processing.image_processor import ImageProcessor
-from database.vector_db import VectorDatabase
+from src.processing.image_processor import ImageProcessor
+from src.database.vector_db import VectorDatabase
 
 logger = logging.getLogger(__name__)
 
