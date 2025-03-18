@@ -7,3 +7,5 @@ tqdm
 numpy
 fastapi
 uvicorn
+torch
+torchvision
